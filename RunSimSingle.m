@@ -9,7 +9,7 @@ clc
 fprintf('-----------------------------------------------------\n')
 fprintf('Simulation of an autonomous quadrotor vehicle\n')
 fprintf('Murray L Ireland\n')
-fprintf('September 2015\n')
+fprintf('September 2017\n')
 fprintf('-----------------------------------------------------\n\n')
 
 SimTime = tic;
@@ -20,8 +20,15 @@ Manual = 1;
 % Run instance from recorded data?
 Inst = 0;
 
+% Run previous sim?
+Prev = 0;
+
 if Inst > 0
+    Manual = 1;
     load('ModelPropsTestRun-05-12-15_Fails')
+elseif Prev
+    Manual = 1;
+    load('ModelPropsPrev')
 end
 
 % AGENTS ------------------------------------------------------------------
@@ -29,8 +36,10 @@ end
 % Environment
 if Inst > 0
     DropSite = BadProps(Inst).InitCond.DropSite(1:3);
+elseif Prev
+    DropSite = PrevProps.InitCond.DropSite(1:3);
 else
-    DropSite = [1.3303 -1.3307 0]';
+    DropSite = [0 0 0]';
 end
 
 if Manual
@@ -44,9 +53,12 @@ NumQuads = 1;
 if Inst > 0
     Pos = BadProps(Inst).InitCond.Quad(1:3);
     Att = BadProps(Inst).InitCond.Quad(4:6);
+elseif Prev
+    Pos = PrevProps.InitCond.Quad(1:3);
+    Att = PrevProps.InitCond.Quad(4:6);
 else
-    Pos = [-1.8795 -2.5936 -0.2000]'; % Initial position (m)
-    Att = [0 0 0.9305]'; % Initial attitude (rad)
+    Pos = [0 0 -0.2000]'; % Initial position (m)
+    Att = [0 0 0]'; % Initial attitude (rad)
 end
 
 if Manual
@@ -56,18 +68,22 @@ if Manual
     end
 else
     for i = 1:NumQuads
-        Agents.Quad(i) = cQuadrotor(['Quad',num2str(i)],Environment);
+        Agents.Quad(i) = cQuadrotor(['Quad',num2str(i)],Environment,...
+            'Pose',[Pos; Att]);
     end
 end
 
-Manual = 0;
-
 % Targets
-NumTargets = 2;
+NumTargets = 1;
 if Inst > 0
     for i = 1:NumTargets
         TPos(:,i) = BadProps(Inst).InitCond.(['Target',num2str(i)])(1:3);
         TAtt(:,i) = BadProps(Inst).InitCond.(['Target',num2str(i)])(4:6);
+    end
+elseif Prev
+    for i = 1:NumTargets
+        TPos(:,i) = PrevProps.InitCond.(['Target',num2str(i)])(1:3);
+        TAtt(:,i) = PrevProps.InitCond.(['Target',num2str(i)])(4:6);
     end
 else
     TPos = [-0.4292 1.1183 -0.05
@@ -82,12 +98,24 @@ if Manual
     for i = 1:NumTargets
         Agents.Target(i) = cTarget(Shapes{i},Environment,...
             'Pose',[TPos(:,i); TAtt(:,i)]);
+        Agents.Target(i) = cTarget(Shapes{i},Environment,...
+            'Pose','random');
     end
 else
     for i = 1:NumTargets
         Agents.Target(i) = cTarget(Shapes{i},Environment);
     end
 end
+
+NewProps.InitCond.DropSite = DropSite;
+NewProps.InitCond.Quad = [Pos' Att']';
+for i = 1:NumTargets
+    NewProps.InitCond.(['Target',num2str(i)]) = [TPos(:,i)' TAtt(:,i)']';
+end
+
+% Save properties to reuse next time
+PrevProps = NewProps;
+save('ModelPropsPrev','PrevProps')
 
 % SIMULATION ENGINE -------------------------------------------------------
 

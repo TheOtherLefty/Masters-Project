@@ -5,7 +5,7 @@ classdef cEnvironment < handle
     properties
         
         ID
-        Size = [4 7 3]';
+        Size = [5 5 3]';
         Geometry
         RoomLimits
         
@@ -27,10 +27,12 @@ classdef cEnvironment < handle
             
             % Get drop location if specified
             i = find(strcmp(varargin,'Dropsite'));
-            if ~isempty(i)
+            if strcmp(varargin{i+1},'random')
+                obj.Geometry.DropLocation = [];
+            elseif ~isempty(i)
                 obj.Geometry.DropLocation = varargin{i+1};
             else
-                obj.Geometry.DropLocation = [];
+                error('Please enter an initial position for the quadrotor or use ''random''')
             end
             obj.Geometry.DropRadius = 0.25;
             obj.Geometry.DropSite = obj.InitialiseDropSite;
@@ -40,7 +42,7 @@ classdef cEnvironment < handle
         function [V,F,C,A] = InitialiseGeometry(obj)
             
             % Set height as ground
-            r = [0 0 -obj.Size(3)/2]';
+            r = -obj.Size/2;
             
             % Initial shape
             V0 = [ obj.Size(1)/2  obj.Size(2)/2  obj.Size(3)/2

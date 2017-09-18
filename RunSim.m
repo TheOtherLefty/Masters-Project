@@ -2,7 +2,7 @@
 % Murray L Ireland
 % September 2015
 
-% function [Data,Sim,Environment,Fail] = RunSim
+function [Data,Sim,Environment,Fail] = RunSim
 
 % close all
 % clearvars -except h GlobalTime Count Run Runs SaveFile

@@ -286,7 +286,7 @@ classdef cBlackBox < handle
             shading flat
             
             % Animate agents
-            for k = 1:length(obj.Time)
+            for k = 1:2:length(obj.Time)
                 
                 set(p,'Vertices',obj.Geometry.Vertices{:,:,k})
                 

@@ -54,10 +54,12 @@ classdef cTarget < cAgent
             % Initialise position
             obj.EffRadius = 0.05;
             i = find(strcmp(varargin,'Pose'));
-            if isempty(i)
+            if strcmp(varargin{i+1},'random')
                 Pose = obj.InitPosition;
-            else
+            elseif ~isempty(i)
                 Pose = varargin{i+1};
+            else
+                error('Please enter an initial position for the quadrotor or use ''random''')
             end
             
             % Intialise states

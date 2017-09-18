@@ -52,7 +52,7 @@ classdef cAgent < handle
                 + (obj.RoomLimits(1:2,2)+obj.RoomLimits(1:2,1))/2
                     -obj.EffRadius
                     zeros(2,1)
-                    wrapToPi(2*pi*rand)];
+                    0*wrapToPi(2*pi*rand)];
             
         end
         
