@@ -93,9 +93,9 @@ classdef cQuadrotor < cAgent
 
         % Fault properties
         % (Faults % probability occ. in 1 minute)
-        P_GrabberFailure = 0.05;
-        P_ActuatorFailure = 0.01;
-        P_SystemsFault = 0.05;
+        P_GrabberFailure = 0*0.05;
+        P_ActuatorFailure = 0*0.01;
+        P_SystemsFault = 0*0.05;
         ActuatorFaults = [0 0 0 0]';
 
     end
