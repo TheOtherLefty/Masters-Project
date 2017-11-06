@@ -110,7 +110,11 @@ switch State
         end
         
         % Update navigation
-        [Commands,ExitFlag] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
+        if isempty(obj.Decisions)
+            [Commands,ExitFlag] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
+        else
+            [Commands,ExitFlag] = obj.SmartSearch(obj.States,obj.Time-obj.ModeEntryTime);
+        end
         
         % Update camera
         [Coordinates,DropSite] = obj.CameraModel(obj.States,obj.Time);

@@ -14,8 +14,10 @@ fprintf('-----------------------------------------------------\n\n')
 
 SimTime = tic;
 
-% Load trajectory info
 
+% Load decision info
+DecisionsFile = 'scenario3b_5x5_4_3'; % Initial state: 303
+[States, Transitions] = LoadDecisions(DecisionsFile);
 
 % AGENTS ------------------------------------------------------------------
 
@@ -23,10 +25,11 @@ SimTime = tic;
 Environment = cEnvironment('Grid size',[5, 5]);
 
 % Quadrotors
-Agents.Quad = cQuadrotor('Quad',Environment,'Pose',[0 0 0 0 0 0]');
+Agents.Quad = cQuadrotor('Quad',Environment,'Pose',[0 0 0 0 0 0]',...
+    'States', States, 'Transitions', Transitions);
 
 % Targets
-NumTargets = 2;
+NumTargets = 3;
 Shapes = {'Cube','Ball','Pyramid'};
 for i = 1:NumTargets
     Agents.Target(i) = cTarget(Shapes{i},Environment);
@@ -36,7 +39,7 @@ end
 
 % Simulation properties
 t = 0;          % Initialise time (s)
-tfin = 100;      % End time (s)
+tfin = 10;      % End time (s)
 dt = 0.01;      % Solver increment (s)
 tsamp = dt;    % Sample increment (s)
 tsamp = 0.05;

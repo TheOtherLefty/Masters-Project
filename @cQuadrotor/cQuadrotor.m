@@ -77,6 +77,7 @@ classdef cQuadrotor < cAgent
         Home;
         NumTargets = 0;
         TargetCount = 0;
+        Decisions
 
         % Grabber properties
         GrabberActive = 0;
@@ -132,6 +133,19 @@ classdef cQuadrotor < cAgent
                 Pose = obj.InitPosition;
             else
                 Pose = varargin{i+1};
+            end
+            
+            % Initialise autonomous decisions
+            i1 = find(strcmp(varargin,'States'));
+            i2 = find(strcmp(varargin,'Transitions'));
+            if isempty(i1) || isempty(i2)
+                obj.Decisions = [];
+            else
+                obj.Decisions.States = varargin{i1+1};
+                obj.Decisions.Transitions = varargin{i2+1};
+%                 obj.Decisions.State = 303;
+                obj.Decisions.Gridpoints = ones(1,prod(obj.GridSize));
+%                 obj.Decisions.
             end
 
             % Set home location
