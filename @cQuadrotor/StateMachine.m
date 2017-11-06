@@ -60,7 +60,7 @@ switch State
         % State transition conditions
         if norm(obj.Commands(1:3) - obj.States(1:3)) < 1e-1
             obj.MissionComplete = 0;
-            State = 'Initialise';
+            State = 'Search';
         end
         
     case 'Initialise'

@@ -106,7 +106,9 @@ classdef cQuadrotor < cAgent
         function obj = cQuadrotor(ID,Environment,varargin)
 
             % ENVIRONMENT PROPERTIES
-            obj.RoomLimits = Environment.RoomLimits;
+            obj.RoomSize = Environment.RoomSize;
+            obj.GridSize = Environment.GridSize;
+            obj.CellSize = Environment.CellSize;
 
             % AGENT PROPERTIES --------------------------------------------
 
@@ -126,12 +128,10 @@ classdef cQuadrotor < cAgent
             % Initialise position
             obj.EffRadius = 0.2;
             i = find(strcmp(varargin,'Pose'));
-            if strcmp(varargin{i+1},'random')
+            if isempty(i)
                 Pose = obj.InitPosition;
-            elseif ~isempty(i)
-                Pose = varargin{i+1};
             else
-                error('Please enter an initial position for the quadrotor or use ''random''')
+                Pose = varargin{i+1};
             end
 
             % Set home location

@@ -5,9 +5,10 @@ classdef cEnvironment < handle
     properties
         
         ID
-        Size = [5 5 3]';
+        CellSize = 0.5
+        RoomSize
+        GridSize
         Geometry
-        RoomLimits
         
     end
     
@@ -17,23 +18,40 @@ classdef cEnvironment < handle
             
             obj.ID = 'Lab';
             
+            % Get drop location if specified
+            if nargin > 0
+                
+                % Grid size
+                i = find(strcmp(varargin,'Grid size'));
+                if isempty(i)
+                    obj.GridSize = [5, 5]';
+                else
+                    obj.GridSize = (varargin{i+1}(1:2))';
+                end
+                
+                % Drop site
+                i = find(strcmp(varargin,'Dropsite'));
+                if isempty(i)
+                    obj.Geometry.DropLocation = [0 0 0]';
+                else
+                    obj.Geometry.DropLocation = varargin{i+1};
+                end
+                
+            else
+                
+                obj.Geometry.DropLocation = [0 0 0]';
+                obj.GridSize = [5, 5]';
+                
+            end
+            
+            % Set room limits
+            obj.RoomSize = [obj.CellSize*(obj.GridSize(1:2)'-1) -2]';
+            
+            % Initialise geometry
             [obj.Geometry.Vertices,obj.Geometry.Faces,...
                 obj.Geometry.Colours,obj.Geometry.Alpha]...
                 = obj.InitialiseGeometry;
             
-            % Set room limits
-            obj.RoomLimits = [min(obj.Geometry.Vertices)
-                              max(obj.Geometry.Vertices)]';
-            
-            % Get drop location if specified
-            i = find(strcmp(varargin,'Dropsite'));
-            if strcmp(varargin{i+1},'random')
-                obj.Geometry.DropLocation = [];
-            elseif ~isempty(i)
-                obj.Geometry.DropLocation = varargin{i+1};
-            else
-                error('Please enter an initial position for the quadrotor or use ''random''')
-            end
             obj.Geometry.DropRadius = 0.25;
             obj.Geometry.DropSite = obj.InitialiseDropSite;
             
@@ -41,18 +59,18 @@ classdef cEnvironment < handle
         
         function [V,F,C,A] = InitialiseGeometry(obj)
             
-            % Set height as ground
-            r = -obj.Size/2;
+            % Mid-point of room
+            r = obj.RoomSize/2;
             
             % Initial shape
-            V0 = [ obj.Size(1)/2  obj.Size(2)/2  obj.Size(3)/2
-                  -obj.Size(1)/2  obj.Size(2)/2  obj.Size(3)/2
-                  -obj.Size(1)/2 -obj.Size(2)/2  obj.Size(3)/2
-                   obj.Size(1)/2 -obj.Size(2)/2  obj.Size(3)/2
-                   obj.Size(1)/2  obj.Size(2)/2 -obj.Size(3)/2
-                  -obj.Size(1)/2  obj.Size(2)/2 -obj.Size(3)/2
-                  -obj.Size(1)/2 -obj.Size(2)/2 -obj.Size(3)/2
-                   obj.Size(1)/2 -obj.Size(2)/2 -obj.Size(3)/2];
+            V0 = [ r(1)+0.5  r(2)+0.5  r(3)
+                  -r(1)-0.5  r(2)+0.5  r(3)
+                  -r(1)-0.5 -r(2)-0.5  r(3)
+                   r(1)+0.5 -r(2)-0.5  r(3)
+                   r(1)+0.5  r(2)+0.5 -r(3)
+                  -r(1)-0.5  r(2)+0.5 -r(3)
+                  -r(1)-0.5 -r(2)-0.5 -r(3)
+                   r(1)+0.5 -r(2)-0.5 -r(3)];
                
             % Translate and rotate
             V = [V0 ones(size(V0,1),1)];
@@ -62,7 +80,7 @@ classdef cEnvironment < handle
             V = V(:,1:3);
             
             % Faces
-            F = [1 2 3 4];
+            F = [5 6 7 8];
             
             % Colour
             c = [1 1 1];
@@ -77,14 +95,7 @@ classdef cEnvironment < handle
         function DS = InitialiseDropSite(obj)
             
             R = obj.Geometry.DropRadius;
-            P = [(obj.RoomLimits(1:2,2)-obj.RoomLimits(1:2,1)-2*R).*(rand(2,1)-0.5)...
-                + (obj.RoomLimits(1:2,2)+obj.RoomLimits(1:2,1))/2
-                0];
-            if isempty(obj.Geometry.DropLocation)
-                obj.Geometry.DropLocation = P;
-            else
-                P = obj.Geometry.DropLocation;
-            end
+            P = obj.Geometry.DropLocation;
             
             % Number of sides of circle
             N = 16;

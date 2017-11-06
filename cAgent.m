@@ -23,7 +23,9 @@ classdef cAgent < handle
         ModeTransition = 'Active';
         Solver = 'Euler';
         Geometry;
-        RoomLimits;
+        RoomSize;
+        GridSize;
+        CellSize;
         EffRadius;
         
     end
@@ -37,23 +39,23 @@ classdef cAgent < handle
             
 %         end
         
-        % INITIALISE ENVIRONMENT
-        function RoomLimits = InitEnvironment(obj,Environment)
-            
-            RoomLimits = [min(Environment.Geometry.Vertices)
-                          max(Environment.Geometry.Vertices)]';
-            
-        end
-        
         % INITIALISE POSITION
         function Pose = InitPosition(obj)
             
-            Pose = [(obj.RoomLimits(1:2,2)-obj.RoomLimits(1:2,1)-0.2).*(rand(2,1)-0.5)...
-                + (obj.RoomLimits(1:2,2)+obj.RoomLimits(1:2,1))/2
+            % Old
+%             Pose = [(obj.RoomLimits(1:2,2)-obj.RoomLimits(1:2,1)-0.2).*(rand(2,1)-0.5)...
+%                 + (obj.RoomLimits(1:2,2)+obj.RoomLimits(1:2,1))/2
+%                     -obj.EffRadius
+%                     zeros(2,1)
+%                     0*wrapToPi(2*pi*rand)];
+
+            % New
+            Pose = [(obj.RoomSize(1)+obj.CellSize)*rand - obj.CellSize/2
+                    (obj.RoomSize(2)+obj.CellSize)*rand - obj.CellSize/2
                     -obj.EffRadius
                     zeros(2,1)
                     0*wrapToPi(2*pi*rand)];
-            
+           
         end
         
         % INTEGRATE STATE DERIVATIVES

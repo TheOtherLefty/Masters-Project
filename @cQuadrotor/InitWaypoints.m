@@ -1,33 +1,28 @@
 function InitWaypoints(obj)
 
-% Define waypoints
-dR = 0.5;
+% Grid size and step
+gX = obj.GridSize(1);
+gY = obj.GridSize(2);
+dX = obj.CellSize;
 
-Waypoints = [obj.RoomLimits(1,1)+dR obj.RoomLimits(2,1)+dR -2 0*pi/2];
-i = 1;
+% X range
+wpx = (0:gX-1)*dX;
 
-while (max(Waypoints(:,1)) < obj.RoomLimits(1,2)-dR) || (Waypoints(i,2) ~= obj.RoomLimits(2,2)-dR)
+% Constant height
+wpz = -1.5;
+
+% Repeat and flip over y range
+WP = [];
+off = 0;
+dir = 1;
+for i = 1:gY
     
-    i = i + 1;
-    
-    Waypoints(i,:) = Waypoints(i-1,:);
-    
-    if rem(i,2) > 1e-3
-        Waypoints(i,1) = Waypoints(i-1,1) + dR;
-        if rem(i+1,4) > 1e-3
-            Waypoints(i,4) = 0*pi/2;
-        else
-            Waypoints(i,4) = -0*pi/2;
-        end
-    else
-        if rem(i,4) > 1e-3
-            Waypoints(i,2) = obj.RoomLimits(2,2)-dR;
-        else
-            Waypoints(i,2) = obj.RoomLimits(2,1)+dR;
-        end
-    end
+    WP = [WP
+          off+dir*wpx' zeros(gX,1)+dX*(i-1) zeros(gX,1)+wpz zeros(gX,1)];
+    off = off + max(wpx)*dir;
+    dir = -dir;
     
 end
 
-obj.Waypoints = Waypoints;
-obj.MaxWP = i;
+obj.Waypoints = WP;
+obj.MaxWP = size(WP,1);

@@ -19,7 +19,7 @@ SimTime = tic;
 % AGENTS ------------------------------------------------------------------
 
 % Environment
-Environment = cEnvironment('Dropsite',[1.3303 -1.3307 0]');
+Environment = cEnvironment;
 
 % Quadrotors
 Pos = [-1.8795 -2.5936 -0.2000]'; % Initial position (m)
@@ -40,7 +40,7 @@ TAtt = [0 0 -1.6742
         0 0  0.6004]';
 Shapes = {'Cube','Ball','Pyramid'};
 for i = 1:NumTargets
-    Agents.Target(i) = cTarget(Shapes{i},Environment);%,...
+    Agents.Target(i) = cTarget(Shapes{i},Environment,'Pose','random');%,...
 %         'Pose',[TPos(:,i); TAtt(:,i)]);
 end
 

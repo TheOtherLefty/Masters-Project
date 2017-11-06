@@ -35,7 +35,8 @@ classdef cTarget < cAgent
         function obj = cTarget(ID,Environment,varargin)
             
             % ENVIRONMENT PROPERTIES
-            obj.RoomLimits = Environment.RoomLimits;
+            obj.RoomSize = Environment.RoomSize;
+            obj.CellSize = Environment.CellSize;
             
             obj.ID = ID;
             obj.Shape = ID;
@@ -54,12 +55,10 @@ classdef cTarget < cAgent
             % Initialise position
             obj.EffRadius = 0.05;
             i = find(strcmp(varargin,'Pose'));
-            if strcmp(varargin{i+1},'random')
+            if isempty(i)
                 Pose = obj.InitPosition;
-            elseif ~isempty(i)
-                Pose = varargin{i+1};
             else
-                error('Please enter an initial position for the quadrotor or use ''random''')
+                Pose = varargin{i+1};
             end
             
             % Intialise states

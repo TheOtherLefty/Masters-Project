@@ -1,0 +1,449 @@
+// scenario 3
+// control of search and battery recharging
+
+mdp
+
+// search grid size
+const int Xcoord = 4;
+const int Ycoord = 4;
+
+// base coordinates and gridpoint
+const int basex=0;
+const int basey=0;
+const int base = basey*(Xcoord+1)+basex;
+
+// current gridpoint of agent
+formula gp = posy*(Xcoord+1)+posx;
+
+// battery capacity
+const int battery;
+
+// number of objects
+const nobjs;
+
+// which of the four squares are we searching (1...4)
+const square;
+
+// number of unexplored gridpoints
+formula n = gp0+gp1+gp2+gp3+gp4+gp5+gp6+gp7+gp8+gp9+gp10+gp11+gp12+gp13+gp14+gp15+gp16+gp17+gp18+gp19+gp20+gp21+gp22+gp23+gp24;
+
+// probability of finding object
+formula p = objs/(n + 16*(4-square));
+
+// module of the autonomous agent
+module agent
+
+	// mode of the agent
+	s : [0..2] init 0; 	// 0 - search, 1 - found object, 2 - mission complete
+
+	// coordinates of the agent
+	posx : [0..Xcoord] init 0;
+	posy : [0..Ycoord] init 0;
+
+	// number of objects still to find
+	objs : [0..nobjs] init nobjs;
+	
+	// gridpoints (0 - visited, 1 - not visited)
+	gp0 : [0..1] init 1;
+	gp1 : [0..1] init 1;
+	gp2 : [0..1] init 1;
+	gp3 : [0..1] init 1;
+	gp4 : [0..1] init 1;
+	gp5 : [0..1] init 1;
+	gp6 : [0..1] init 1;
+	gp7 : [0..1] init 1;
+	gp8 : [0..1] init 1;
+	gp9 : [0..1] init 1;
+	gp10 : [0..1] init 1;
+	gp11 : [0..1] init 1;
+	gp12 : [0..1] init 1;
+	gp13 : [0..1] init 1;
+	gp14 : [0..1] init 1;
+	gp15 : [0..1] init 1;
+	gp16 : [0..1] init 1;
+	gp17 : [0..1] init 1;
+	gp18 : [0..1] init 1;
+	gp19 : [0..1] init 1;
+	gp20 : [0..1] init 1;
+	gp21 : [0..1] init 1;
+	gp22 : [0..1] init 1;
+	gp23 : [0..1] init 1;
+	gp24 : [0..1] init 1;
+
+	// search gridpoint 0
+	[east] gp0=1 & gp=0 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp0'=0) + 1-p : (posx'=posx+1)&(gp0'=0);
+	[east] gp0=0 & gp=0 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp0=1 & gp=0 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp0'=0) + 1-p : (posx'=posx-1)&(gp0'=0);
+	[west] gp0=0 & gp=0 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp0=1 & gp=0 & s=0 &  posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp0'=0) + 1-p : (posy'=posy+1)&(gp0'=0);
+	[north] gp0=0 & gp=0 & s=0 &  posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp0=1 & gp=0 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp0'=0) + 1-p : (posy'=posy-1)&(gp0'=0);
+	[south] gp0=0 & gp=0 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 1
+	[east] gp1=1 & gp=1 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp1'=0) + 1-p : (posx'=posx+1)&(gp1'=0);
+	[east] gp1=0 & gp=1 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp1=1 & gp=1 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp1'=0) + 1-p : (posx'=posx-1)&(gp1'=0);
+	[west] gp1=0 & gp=1 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp1=1 & gp=1 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp1'=0) + 1-p : (posy'=posy+1)&(gp1'=0);
+	[north] gp1=0 & gp=1 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp1=1 & gp=1 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp1'=0) + 1-p : (posy'=posy-1)&(gp1'=0);
+	[south] gp1=0 & gp=1 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 2
+	[east] gp2=1 & gp=2 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp2'=0) + 1-p : (posx'=posx+1)&(gp2'=0);
+	[east] gp2=0 & gp=2 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp2=1 & gp=2 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp2'=0) + 1-p : (posx'=posx-1)&(gp2'=0);
+	[west] gp2=0 & gp=2 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp2=1 & gp=2 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp2'=0) + 1-p : (posy'=posy+1)&(gp2'=0);
+	[north] gp2=0 & gp=2 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp2=1 & gp=2 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp2'=0) + 1-p : (posy'=posy-1)&(gp2'=0);
+	[south] gp2=0 & gp=2 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 3
+	[east] gp3=1 & gp=3 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp3'=0) + 1-p : (posx'=posx+1)&(gp3'=0);
+	[east] gp3=0 & gp=3 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp3=1 & gp=3 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp3'=0) + 1-p : (posx'=posx-1)&(gp3'=0);
+	[west] gp3=0 & gp=3 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp3=1 & gp=3 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp3'=0) + 1-p : (posy'=posy+1)&(gp3'=0);
+	[north] gp3=0 & gp=3 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp3=1 & gp=3 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp3'=0) + 1-p : (posy'=posy-1)&(gp3'=0);
+	[south] gp3=0 & gp=3 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 4
+	[east] gp4=1 & gp=4 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp4'=0) + 1-p : (posx'=posx+1)&(gp4'=0);
+	[east] gp4=0 & gp=4 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp4=1 & gp=4 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp4'=0) + 1-p : (posx'=posx-1)&(gp4'=0);
+	[west] gp4=0 & gp=4 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp4=1 & gp=4 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp4'=0) + 1-p : (posy'=posy+1)&(gp4'=0);
+	[north] gp4=0 & gp=4 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp4=1 & gp=4 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp4'=0) + 1-p : (posy'=posy-1)&(gp4'=0);
+	[south] gp4=0 & gp=4 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 5
+	[east] gp5=1 & gp=5 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp5'=0) + 1-p : (posx'=posx+1)&(gp5'=0);
+	[east] gp5=0 & gp=5 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp5=1 & gp=5 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp5'=0) + 1-p : (posx'=posx-1)&(gp5'=0);
+	[west] gp5=0 & gp=5 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp5=1 & gp=5 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp5'=0) + 1-p : (posy'=posy+1)&(gp5'=0);
+	[north] gp5=0 & gp=5 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp5=1 & gp=5 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp5'=0) + 1-p : (posy'=posy-1)&(gp5'=0);
+	[south] gp5=0 & gp=5 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 6
+	[east] gp6=1 & gp=6 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp6'=0) + 1-p : (posx'=posx+1)&(gp6'=0);
+	[east] gp6=0 & gp=6 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp6=1 & gp=6 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp6'=0) + 1-p : (posx'=posx-1)&(gp6'=0);
+	[west] gp6=0 & gp=6 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp6=1 & gp=6 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp6'=0) + 1-p : (posy'=posy+1)&(gp6'=0);
+	[north] gp6=0 & gp=6 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp6=1 & gp=6 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp6'=0) + 1-p : (posy'=posy-1)&(gp6'=0);
+	[south] gp6=0 & gp=6 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 7
+	[east] gp7=1 & gp=7 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp7'=0) + 1-p : (posx'=posx+1)&(gp7'=0);
+	[east] gp7=0 & gp=7 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp7=1 & gp=7 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp7'=0) + 1-p : (posx'=posx-1)&(gp7'=0);
+	[west] gp7=0 & gp=7 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp7=1 & gp=7 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp7'=0) + 1-p : (posy'=posy+1)&(gp7'=0);
+	[north] gp7=0 & gp=7 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp7=1 & gp=7 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp7'=0) + 1-p : (posy'=posy-1)&(gp7'=0);
+	[south] gp7=0 & gp=7 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 8
+	[east] gp8=1 & gp=8 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp8'=0) + 1-p : (posx'=posx+1)&(gp8'=0);
+	[east] gp8=0 & gp=8 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp8=1 & gp=8 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp8'=0) + 1-p : (posx'=posx-1)&(gp8'=0);
+	[west] gp8=0 & gp=8 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp8=1 & gp=8 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp8'=0) + 1-p : (posy'=posy+1)&(gp8'=0);
+	[north] gp8=0 & gp=8 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp8=1 & gp=8 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp8'=0) + 1-p : (posy'=posy-1)&(gp8'=0);
+	[south] gp8=0 & gp=8 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 9
+	[east] gp9=1 & gp=9 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp9'=0) + 1-p : (posx'=posx+1)&(gp9'=0);
+	[east] gp9=0 & gp=9 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp9=1 & gp=9 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp9'=0) + 1-p : (posx'=posx-1)&(gp9'=0);
+	[west] gp9=0 & gp=9 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp9=1 & gp=9 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp9'=0) + 1-p : (posy'=posy+1)&(gp9'=0);
+	[north] gp9=0 & gp=9 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp9=1 & gp=9 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp9'=0) + 1-p : (posy'=posy-1)&(gp9'=0);
+	[south] gp9=0 & gp=9 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 10
+	[east] gp10=1 & gp=10 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp10'=0) + 1-p : (posx'=posx+1)&(gp10'=0);
+	[east] gp10=0 & gp=10 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp10=1 & gp=10 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp10'=0) + 1-p : (posx'=posx-1)&(gp10'=0);
+	[west] gp10=0 & gp=10 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp10=1 & gp=10 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp10'=0) + 1-p : (posy'=posy+1)&(gp10'=0);
+	[north] gp10=0 & gp=10 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp10=1 & gp=10 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp10'=0) + 1-p : (posy'=posy-1)&(gp10'=0);
+	[south] gp10=0 & gp=10 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 11
+	[east] gp11=1 & gp=11 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp11'=0) + 1-p : (posx'=posx+1)&(gp11'=0);
+	[east] gp11=0 & gp=11 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp11=1 & gp=11 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp11'=0) + 1-p : (posx'=posx-1)&(gp11'=0);
+	[west] gp11=0 & gp=11 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp11=1 & gp=11 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp11'=0) + 1-p : (posy'=posy+1)&(gp11'=0);
+	[north] gp11=0 & gp=11 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp11=1 & gp=11 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp11'=0) + 1-p : (posy'=posy-1)&(gp11'=0);
+	[south] gp11=0 & gp=11 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 12
+	[east] gp12=1 & gp=12 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp12'=0) + 1-p : (posx'=posx+1)&(gp12'=0);
+	[east] gp12=0 & gp=12 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp12=1 & gp=12 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp12'=0) + 1-p : (posx'=posx-1)&(gp12'=0);
+	[west] gp12=0 & gp=12 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp12=1 & gp=12 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp12'=0) + 1-p : (posy'=posy+1)&(gp12'=0);
+	[north] gp12=0 & gp=12 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp12=1 & gp=12 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp12'=0) + 1-p : (posy'=posy-1)&(gp12'=0);
+	[south] gp12=0 & gp=12 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 13
+	[east] gp13=1 & gp=13 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp13'=0) + 1-p : (posx'=posx+1)&(gp13'=0);
+	[east] gp13=0 & gp=13 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp13=1 & gp=13 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp13'=0) + 1-p : (posx'=posx-1)&(gp13'=0);
+	[west] gp13=0 & gp=13 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp13=1 & gp=13 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp13'=0) + 1-p : (posy'=posy+1)&(gp13'=0);
+	[north] gp13=0 & gp=13 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp13=1 & gp=13 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp13'=0) + 1-p : (posy'=posy-1)&(gp13'=0);
+	[south] gp13=0 & gp=13 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 14
+	[east] gp14=1 & gp=14 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp14'=0) + 1-p : (posx'=posx+1)&(gp14'=0);
+	[east] gp14=0 & gp=14 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp14=1 & gp=14 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp14'=0) + 1-p : (posx'=posx-1)&(gp14'=0);
+	[west] gp14=0 & gp=14 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp14=1 & gp=14 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp14'=0) + 1-p : (posy'=posy+1)&(gp14'=0);
+	[north] gp14=0 & gp=14 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp14=1 & gp=14 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp14'=0) + 1-p : (posy'=posy-1)&(gp14'=0);
+	[south] gp14=0 & gp=14 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 15
+	[east] gp15=1 & gp=15 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp15'=0) + 1-p : (posx'=posx+1)&(gp15'=0);
+	[east] gp15=0 & gp=15 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp15=1 & gp=15 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp15'=0) + 1-p : (posx'=posx-1)&(gp15'=0);
+	[west] gp15=0 & gp=15 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp15=1 & gp=15 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp15'=0) + 1-p : (posy'=posy+1)&(gp15'=0);
+	[north] gp15=0 & gp=15 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp15=1 & gp=15 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp15'=0) + 1-p : (posy'=posy-1)&(gp15'=0);
+	[south] gp15=0 & gp=15 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 16
+	[east] gp16=1 & gp=16 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp16'=0) + 1-p : (posx'=posx+1)&(gp16'=0);
+	[east] gp16=0 & gp=16 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp16=1 & gp=16 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp16'=0) + 1-p : (posx'=posx-1)&(gp16'=0);
+	[west] gp16=0 & gp=16 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp16=1 & gp=16 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp16'=0) + 1-p : (posy'=posy+1)&(gp16'=0);
+	[north] gp16=0 & gp=16 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp16=1 & gp=16 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp16'=0) + 1-p : (posy'=posy-1)&(gp16'=0);
+	[south] gp16=0 & gp=16 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 17
+	[east] gp17=1 & gp=17 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp17'=0) + 1-p : (posx'=posx+1)&(gp17'=0);
+	[east] gp17=0 & gp=17 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp17=1 & gp=17 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp17'=0) + 1-p : (posx'=posx-1)&(gp17'=0);
+	[west] gp17=0 & gp=17 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp17=1 & gp=17 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp17'=0) + 1-p : (posy'=posy+1)&(gp17'=0);
+	[north] gp17=0 & gp=17 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp17=1 & gp=17 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp17'=0) + 1-p : (posy'=posy-1)&(gp17'=0);
+	[south] gp17=0 & gp=17 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 18
+	[east] gp18=1 & gp=18 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp18'=0) + 1-p : (posx'=posx+1)&(gp18'=0);
+	[east] gp18=0 & gp=18 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp18=1 & gp=18 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp18'=0) + 1-p : (posx'=posx-1)&(gp18'=0);
+	[west] gp18=0 & gp=18 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp18=1 & gp=18 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp18'=0) + 1-p : (posy'=posy+1)&(gp18'=0);
+	[north] gp18=0 & gp=18 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp18=1 & gp=18 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp18'=0) + 1-p : (posy'=posy-1)&(gp18'=0);
+	[south] gp18=0 & gp=18 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 19
+	[east] gp19=1 & gp=19 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp19'=0) + 1-p : (posx'=posx+1)&(gp19'=0);
+	[east] gp19=0 & gp=19 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp19=1 & gp=19 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp19'=0) + 1-p : (posx'=posx-1)&(gp19'=0);
+	[west] gp19=0 & gp=19 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp19=1 & gp=19 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp19'=0) + 1-p : (posy'=posy+1)&(gp19'=0);
+	[north] gp19=0 & gp=19 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp19=1 & gp=19 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp19'=0) + 1-p : (posy'=posy-1)&(gp19'=0);
+	[south] gp19=0 & gp=19 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 20
+	[east] gp20=1 & gp=20 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp20'=0) + 1-p : (posx'=posx+1)&(gp20'=0);
+	[east] gp20=0 & gp=20 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp20=1 & gp=20 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp20'=0) + 1-p : (posx'=posx-1)&(gp20'=0);
+	[west] gp20=0 & gp=20 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp20=1 & gp=20 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp20'=0) + 1-p : (posy'=posy+1)&(gp20'=0);
+	[north] gp20=0 & gp=20 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp20=1 & gp=20 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp20'=0) + 1-p : (posy'=posy-1)&(gp20'=0);
+	[south] gp20=0 & gp=20 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 21
+	[east] gp21=1 & gp=21 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp21'=0) + 1-p : (posx'=posx+1)&(gp21'=0);
+	[east] gp21=0 & gp=21 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp21=1 & gp=21 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp21'=0) + 1-p : (posx'=posx-1)&(gp21'=0);
+	[west] gp21=0 & gp=21 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp21=1 & gp=21 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp21'=0) + 1-p : (posy'=posy+1)&(gp21'=0);
+	[north] gp21=0 & gp=21 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp21=1 & gp=21 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp21'=0) + 1-p : (posy'=posy-1)&(gp21'=0);
+	[south] gp21=0 & gp=21 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 22
+	[east] gp22=1 & gp=22 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp22'=0) + 1-p : (posx'=posx+1)&(gp22'=0);
+	[east] gp22=0 & gp=22 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp22=1 & gp=22 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp22'=0) + 1-p : (posx'=posx-1)&(gp22'=0);
+	[west] gp22=0 & gp=22 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp22=1 & gp=22 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp22'=0) + 1-p : (posy'=posy+1)&(gp22'=0);
+	[north] gp22=0 & gp=22 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp22=1 & gp=22 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp22'=0) + 1-p : (posy'=posy-1)&(gp22'=0);
+	[south] gp22=0 & gp=22 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 23
+	[east] gp23=1 & gp=23 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp23'=0) + 1-p : (posx'=posx+1)&(gp23'=0);
+	[east] gp23=0 & gp=23 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp23=1 & gp=23 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp23'=0) + 1-p : (posx'=posx-1)&(gp23'=0);
+	[west] gp23=0 & gp=23 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp23=1 & gp=23 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp23'=0) + 1-p : (posy'=posy+1)&(gp23'=0);
+	[north] gp23=0 & gp=23 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp23=1 & gp=23 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp23'=0) + 1-p : (posy'=posy-1)&(gp23'=0);
+	[south] gp23=0 & gp=23 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// search gridpoint 24
+	[east] gp24=1 & gp=24 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp24'=0) + 1-p : (posx'=posx+1)&(gp24'=0);
+	[east] gp24=0 & gp=24 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp24=1 & gp=24 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp24'=0) + 1-p : (posx'=posx-1)&(gp24'=0);
+	[west] gp24=0 & gp=24 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp24=1 & gp=24 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp24'=0) + 1-p : (posy'=posy+1)&(gp24'=0);
+	[north] gp24=0 & gp=24 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp24=1 & gp=24 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp24'=0) + 1-p : (posy'=posy-1)&(gp24'=0);
+	[south] gp24=0 & gp=24 & s=0 & posy>0 -> (posy'=posy-1);
+
+	// deposit at base and more objects to find
+	[end] (s=1) & (objs>1) -> (s'=0)&(objs'=objs-1)&(posx'=basex)&(posy'=basey);
+	// deposit at base and all objects found
+	[end] (s=1) & (objs=1) -> (s'=2)&(objs'=objs-1)&(posx'=basex)&(posy'=basey);
+
+	// mission complete
+	[end] (s=2) & (posx=basex) & (posy=basey) -> true;
+
+endmodule
+
+// battery module
+module battery
+
+	b: [0..battery] init battery;
+
+	// only allow movement if can get back to base after movement
+	[east] b-2>=(2*(max(posx+1,basex)-min(posx+1,basex))+2*(max(posy,basey)-min(posy,basey))) & !gp=base -> (b'=b-2);
+	[west] b-2>=(2*(max(posx-1,basex)-min(posx-1,basex))+2*(max(posy,basey)-min(posy,basey))) & !gp=base -> (b'=b-2);
+	[north] b-2>=(2*(max(posx,basex)-min(posx,basex))+2*(max(posy+1,basey)-min(posy+1,basey))) & !gp=base -> (b'=b-2);
+	[south] b-2>=(2*(max(posx,basex)-min(posx,basex))+2*(max(posy-1,basey)-min(posy-1,basey))) & !gp=base -> (b'=b-2);
+
+	// full charge when an base (then moves)
+	[west] gp=base -> (b'=battery-2);
+	[east] gp=base -> (b'=battery-2);
+	[north] gp=base -> (b'=battery-2);
+	[south] gp=base -> (b'=battery-2);
+	
+	// deposit at base made in one step
+	[end] s=1 & b>=(2*(max(posx,basex)-min(posx,basex))+2*(max(posy,basey)-min(posy,basey))) -> (b'=b-(2*(max(posx,basex)-min(posx,basex))+2*(max(posy,basey)-min(posy,basey))));
+
+	// mission complete
+	[end] s=2 -> true;
+
+endmodule
+
+// reward structure for time passage
+rewards "time"
+        [south] true : 2;
+        [north] true : 2;
+        [east] true : 2;
+        [west] true : 2;
+        // move back to base in one step
+        [end] s=1 : (2*(max(posx,basex)-min(posx,basex))+2*(max(posy,basey)-min(posy,basey)));
+endrewards
+
+// reward structure for number of charges
+rewards "charges"
+        [south] posx=0 & posy=0 : 1;
+        [north] posx=0 & posy=0 : 1;
+        [east] posx=0 & posy=0 : 1;
+        [west] posx=0 & posy=0 : 1;
+endrewards
