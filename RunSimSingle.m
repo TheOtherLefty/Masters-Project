@@ -2,6 +2,19 @@
 % Murray L Ireland
 % September 2015
 
+% -----------------------
+%
+% CURRENT STATUS:
+% Quad moves to grid point and then checks its current state against the
+% table of all possible states. It then moves in the direction specified by
+% the table of transitions.
+%
+% NEED TO:
+% Make sure quad only picks one state to move to. Additional states to
+% include in conditions are the mode and battery.
+%
+% -----------------------
+
 close all
 clearvars -except h GlobalTime Count Run Runs SaveFile
 clc
@@ -39,7 +52,7 @@ end
 
 % Simulation properties
 t = 0;          % Initialise time (s)
-tfin = 10;      % End time (s)
+tfin = 100;      % End time (s)
 dt = 0.01;      % Solver increment (s)
 tsamp = dt;    % Sample increment (s)
 tsamp = 0.05;

@@ -4,9 +4,9 @@ function [Yd, ExitFlag] = SmartSearch(obj, Y, t)
 if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     
     % Current position and grid point
-    x = round(Y(1)/obj.CellSize)
-    y = round(Y(2)/obj.CellSize)
-    gp = y*obj.GridSize(1) + x
+    x = round(Y(1)/obj.CellSize);
+    y = round(Y(2)/obj.CellSize);
+    gp = y*obj.GridSize(1) + x;
     
     % Num of targets to find
     objs = obj.NumTargets - obj.TargetCount;
@@ -20,11 +20,11 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     % cond5 = Battery
     
     % Checks
-    check12 = find(cond1 & cond2)
-    check3 = find(cond3)
-    check4 = find(cond4)
+%     check12 = find(cond1 & cond2)
+%     check3 = find(cond3)
+%     check4 = find(cond4)
     
-    state = obj.Decisions.States.state(cond1 & cond2 & cond3 & cond4)
+    state = obj.Decisions.States.state(cond1 & cond2 & cond3 & cond4);
     
     % Limit to first solution only
     state = state(1);
@@ -56,12 +56,12 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
         error(['Something is wrong, dir is ',dir])
     end
     
-    newgp = y*obj.GridSize(1) + x
+%     newgp = y*obj.GridSize(1) + x
     obj.WP = y*obj.GridSize(1) + x + 1;
     
-    Yd = obj.Waypoints(obj.WP,:)'
+%     Yd = obj.Waypoints(obj.WP,:)'
     
-    pause
+%     pause
     
 end
 
