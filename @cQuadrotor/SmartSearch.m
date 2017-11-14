@@ -13,21 +13,43 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     
     % Find current state in table
     tol = 1e-6;
-    cond1 = abs(obj.Decisions.States.posx - x) < tol;
-    cond2 = abs(obj.Decisions.States.posy - y) < tol;
-    cond3 = abs(obj.Decisions.States.objs - objs) < tol;
-    cond4 = abs(sum(obj.Decisions.States.gps - obj.Decisions.Gridpoints,2)) < tol;
-    % cond5 = Battery
+    cond{1} = abs(obj.Decisions.States.posx - x) < tol;
+    cond{2} = abs(obj.Decisions.States.posy - y) < tol;
+    cond{3} = abs(obj.Decisions.States.objs - objs) < tol;
+    cond{4} = abs(sum(obj.Decisions.States.gps - obj.Decisions.Gridpoints,2)) < tol;
+    cond{5} = abs(obj.Decisions.States.b - obj.BatteryLevel) < tol;
+    
+    % Reset battery if at (0, 0) and it's empty
+    if abs(x) < tol && abs(y) < tol && abs(obj.BatteryLevel) < tol
+        obj.BatteryLevel = obj.BatteryMax - obj.BatteryLossRate;
+    end
     
     % Checks
 %     check12 = find(cond1 & cond2)
 %     check3 = find(cond3)
 %     check4 = find(cond4)
     
-    state = obj.Decisions.States.state(cond1 & cond2 & cond3 & cond4);
+    states_all = obj.Decisions.States.state(cond{1} & cond{2} & cond{3} & cond{4} & cond{5});
     
     % Limit to first solution only
-    state = state(1);
+    try
+        state = states_all(1);
+    catch ME
+        states_all
+        for i = 1:length(cond)
+            for j = 1:length(cond)
+                BoolTable(i,j) = any(cond{i} & cond{j});
+            end
+        end
+        fprintf('Previous state: %d\n', obj.Decisions.CurrentState)
+        fprintf('Current state values: posx: %d, posy: %d, objs: %d, b: %d\n', x, y, objs, obj.BatteryLevel)
+        fprintf('    gps = [ '), fprintf('%d ', obj.Decisions.Gridpoints), fprintf(']\n\n')
+        fprintf('Condition table:\n')
+        fprintf('   x   y objs gps  b \n')
+        disp(BoolTable)
+    end
+    
+    obj.Decisions.CurrentState = state;
     
     % Get direction to move and predicted next states
     dir = obj.Decisions.Transitions.dir(obj.Decisions.Transitions.state == state);
@@ -58,6 +80,8 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     
 %     newgp = y*obj.GridSize(1) + x
     obj.WP = y*obj.GridSize(1) + x + 1;
+    obj.WPcount = obj.WPcount + 1;
+    obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate;
     
 %     Yd = obj.Waypoints(obj.WP,:)'
     

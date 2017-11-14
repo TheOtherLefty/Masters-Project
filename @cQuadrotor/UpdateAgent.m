@@ -19,14 +19,14 @@ for a = 1:length(BB.Agents.Target)
 end
 
 % Update finite states (override in testing mode)
-if rem(obj.Time,obj.dt_Controller) < 1e-6
+% if rem(obj.Time,obj.dt_Controller) < 1e-6
     if ~strcmp(obj.Mode,'Testing')
         
         obj.Mode = obj.StateMachine(obj.Mode);
         
     else
         
-        Commands = [0 0 -0.5 pi/2]';
+        Commands = [0 0 -0.5 0]';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -36,7 +36,7 @@ if rem(obj.Time,obj.dt_Controller) < 1e-6
             obj.Controller(obj.StatesEst,Commands,obj.Time,0);
         
     end
-end
+% end
 
 % Update states
 [obj.States,obj.StateTrans,obj.Time] = ...
@@ -58,7 +58,7 @@ obj.Status = obj.StatusMonitor;
 
 % Update blackboard
 Props = {'Time','States','StateTrans','Inputs','PseudoInputs',...
-    'Outputs','Commands','Mode','Status'};
+    'Outputs','Commands','Mode','Status','BatteryLevel','TargetCount'};
 for p = 1:length(Props)
     BB.Agents.Quad(ind).(Props{p}) = obj.(Props{p});
 end

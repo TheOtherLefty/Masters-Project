@@ -95,11 +95,15 @@ classdef cBlackBox < handle
                     
                     if strcmp(Type,'Quad')
                         obj.Agents.(Type)(i).Camera.Vertices{:,:,end+1}...
-                                = Blackboard.Agents.(Type)(i).Camera.Vertices;
+                            = Blackboard.Agents.(Type)(i).Camera.Vertices;
                         obj.Agents.(Type)(i).Camera.Centroid{end+1}...
-                                = Blackboard.Agents.(Type)(i).Camera.Centroid;
+                            = Blackboard.Agents.(Type)(i).Camera.Centroid;
                         obj.Agents.(Type)(i).Camera.DropSite{end+1}...
-                                = Blackboard.Agents.(Type)(i).Camera.DropSite;
+                            = Blackboard.Agents.(Type)(i).Camera.DropSite;
+                        obj.Agents.(Type)(i).BatteryLevel(end+1)...
+                            = Blackboard.Agents.(Type)(i).BatteryLevel;
+                        obj.Agents.(Type)(i).TargetCount(end+1)...
+                            = Blackboard.Agents.(Type)(i).TargetCount;
                     end
                     
                     % Update mode
@@ -213,18 +217,18 @@ classdef cBlackBox < handle
             rotate3d, axis equal
             view([0 0 -1]), box on, hold on, grid on
             Res = obj.Agents.Quad(1).Camera.Res;
-            Bnd = obj.Agents.Quad(1).Camera.BndRadius;
+            Bnd = obj.Agents.Quad(1).Camera.Bnd;
             xlim(Res(1)*0.5*[-1 1])
             ylim(Res(2)*0.5*[-1 1])
             zlim([10 1000])
-%             plot3([-Bnd(1)/2 -Bnd(1)/2 Bnd(1)/2 Bnd(1)/2 -Bnd(1)/2],...
-%                 [-Bnd(2)/2 Bnd(2)/2 Bnd(2)/2 -Bnd(2)/2 -Bnd(2)/2],...
-%                 [10 10 10 10 10],'r--')
-            NBnd = 16;
-            psiBnd = (0:NBnd)*2*pi/NBnd;
-            plot3(Bnd*cos(psiBnd),Bnd*sin(psiBnd),0*psiBnd+10,'r--')
-            plot3([0 0],0.5*Res(2)*[-1 1],[10 10],'k-.')
-            plot3(0.5*Res(1)*[-1 1],[0 0],[10 10],'k-.')
+            plot3([-Bnd/2 -Bnd/2 Bnd/2 Bnd/2 -Bnd/2],...
+                [-Bnd/2 Bnd/2 Bnd/2 -Bnd/2 -Bnd/2],...
+                [10 10 10 10 10],'r--')
+%             NBnd = 16;
+%             psiBnd = (0:NBnd)*2*pi/NBnd;
+%             plot3(Bnd*cos(psiBnd),Bnd*sin(psiBnd),0*psiBnd+10,'r--')
+%             plot3([0 0],0.5*Res(2)*[-1 1],[10 10],'k-.')
+%             plot3(0.5*Res(1)*[-1 1],[0 0],[10 10],'k-.')
             
             % Initialise video
             if obj.SaveVideo

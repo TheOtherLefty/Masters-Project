@@ -27,6 +27,7 @@ classdef cAgent < handle
         GridSize;
         CellSize;
         EffRadius;
+        BatteryLevel = 0;
         
     end
     

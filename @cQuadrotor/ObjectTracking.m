@@ -91,11 +91,14 @@ end
 % Remove centroids outside of boundary
 Cvisb = [];
 B = [];
-for c = 1:size(Cvisd,1)
-    B(c) = norm(Cvisd(c,1:2));
-end
-if ~isempty(B)
-    Cvisb = Cvisd(B<obj.Camera.BndRadius,:);
+% for c = 1:size(Cvisd,1)
+%     B(c) = norm(Cvisd(c,1:2));
+% end
+if ~isempty(Cvisd)
+    Cvisb = Cvis(and(abs(Cvis(:,1))<obj.Camera.Bnd/2,...
+                abs(Cvis(:,2))<obj.Camera.Bnd/2),:);
+%     Cvisb = Cvisd(B<obj.Camera.BndRadius,:)
+%     pause
 end
 %             Cvisb = Cvis(and(abs(Cvis(:,1))<obj.Camera.Bnd(1)/2,...
 %                 abs(Cvis(:,2))<obj.Camera.Bnd(2)/2),:);

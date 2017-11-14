@@ -14,7 +14,8 @@ switch State
         % Entry conditions
         if strcmp(obj.ModeTransition,'Entry')
             obj.ModeTransition = 'Active';
-            obj.BatteryRate = obj.ChargeRate;
+%             obj.BatteryRate = obj.ChargeRate;
+%             obj.BatteryLevel = obj.MaxBattery;
             fprintf('Time %4.2f s: Agent idle\n',obj.Time)
             if obj.MissionComplete
                 fprintf('    MISSION COMPLETE\n')
@@ -31,7 +32,7 @@ switch State
         obj.epos_int = [0 0 0]';
         
         % State transition conditions
-        if ~obj.MissionComplete && ~obj.MissionFailed && obj.States(15) >= obj.MaxBattery
+        if ~obj.MissionComplete && ~obj.MissionFailed % && obj.States(15) >= obj.MaxBattery
             State = 'Take-off';
             obj.BatteryWarning = 0;
         elseif (obj.MissionFailed || obj.MissionComplete) && obj.Time - obj.ModeEntryTime > 2
@@ -120,7 +121,7 @@ switch State
         [Coordinates,DropSite] = obj.CameraModel(obj.States,obj.Time);
         
         % Update object tracking
-        [~,TargetFound,~] = obj.ObjectTracking(Coordinates,DropSite);
+        [~,att(2),~] = obj.ObjectTracking(Coordinates,DropSite);
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -130,7 +131,7 @@ switch State
             obj.Controller(obj.StatesEst,Commands,obj.Time,0);
         
         % Exit conditions
-        if TargetFound
+        if att(2)
             fprintf('    Target found, need to identify\n')
             State = 'Identify';
             obj.VelLimit = obj.VelLimitSaved;
@@ -151,13 +152,13 @@ switch State
         end
         
         % Update navigation
-        Commands = [obj.IDPosition(1:2)' -2 obj.Commands(6)]';
+        Commands = [obj.IDPosition(1:2)' -1 obj.Commands(6)]';
         
         % Update camera
         [Coordinates,DropSite] = obj.CameraModel(obj.States,obj.Time);
         
         % Update object tracking
-        [~,TargetFound,~] = obj.ObjectTracking(Coordinates,DropSite);
+        [~,att(2),~] = obj.ObjectTracking(Coordinates,DropSite);
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -439,7 +440,8 @@ switch State
             State = 'Land';
             obj.MissionComplete = 1;
         else
-            fprintf('    Targets remaining\n')
+            fprintf('    %d targets remaining\n', obj.NumTargets - obj.TargetCount)
+            obj.WP = 1;
             State = 'Return to search';
         end
         
@@ -452,7 +454,7 @@ switch State
         end
         
         % Update navigation
-        Commands = [0 0 -2 obj.Commands(6)]';
+        Commands = [0 0 -1 obj.Commands(6)]';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);

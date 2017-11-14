@@ -23,11 +23,12 @@ classdef cQuadrotor < cAgent
         FloorDamp = 0.5;
 
         % Power properties
-        MaxBattery = 11;
-        ChargeRate = 0.025;
-        LossRate = -0.005;
-        BatteryRate;
-        WarningLevel = 10.55;
+        MaxBattery = 32;
+        ChargeRate = 0.025; % Old
+        LossRate = -0.005;  % Old
+        BatteryRate;        % Old
+        WarningLevel = 10.55;   % Old
+        BatteryLossRate = 2;
 
         % Controller properties
         Kx;
@@ -40,7 +41,7 @@ classdef cQuadrotor < cAgent
         AccLimit = 2;
         VelLimit = 5;
         VelLimitSaved = 5;
-        dt_Controller = 0.01;
+        dt_Controller = 0.002;
         VelFilter = 50;
         VelInt = [0 0 0]';
         Cint = 0;
@@ -48,7 +49,7 @@ classdef cQuadrotor < cAgent
         epos_int = [0 0 0]';
 
         % Sensor properties
-        dt_Sensor = 0.01;
+        dt_Sensor = 0.002;
         CameraPosition = [0 0 0.1]';
         CameraAngle = -90*pi/180;
         Camera
@@ -66,6 +67,7 @@ classdef cQuadrotor < cAgent
         Waypoints
         IDPosition;
         WP = 1;
+        WPcount = 1;
         MaxWP;
         CurrentColours;
         NC = 1;
@@ -125,6 +127,9 @@ classdef cQuadrotor < cAgent
             else
                 obj.TimeStep = varargin{i+1};
             end
+            
+            obj.dt_Controller = obj.TimeStep;
+            obj.dt_Sensor = obj.TimeStep;
 
             % Initialise position
             obj.EffRadius = 0.2;
@@ -141,6 +146,7 @@ classdef cQuadrotor < cAgent
             if isempty(i1) || isempty(i2)
                 obj.Decisions = [];
             else
+                obj.Decisions.CurrentStates = 303;
                 obj.Decisions.States = varargin{i1+1};
                 obj.Decisions.Transitions = varargin{i2+1};
 %                 obj.Decisions.State = 303;
@@ -171,6 +177,7 @@ classdef cQuadrotor < cAgent
 
             % Initialise battery
             obj.BatteryRate = obj.ChargeRate;
+            obj.BatteryLevel = obj.MaxBattery;
 
             % Initialise state transitions
             obj.StateTrans = obj.Dynamics(obj.States,obj.Inputs,obj.Time);
@@ -211,12 +218,12 @@ classdef cQuadrotor < cAgent
             % Initialise camera
             obj.Camera.FOV = 45*pi/180;
             obj.Camera.Res = [800 600];
-            obj.Camera.Bnd = obj.Camera.Res*2/3;
             obj.Camera.BndRadius = 100;
             obj.Camera.Vertices = [];
             obj.Camera.SceneVertices = [];
             obj.Camera.DropSite = [];
             obj.Camera.FocalLength = obj.Camera.Res(1)/(2*tan(obj.Camera.FOV));
+            obj.Camera.Bnd = obj.Camera.FocalLength*0.5/1;
             obj.Camera.Centroid = NaN*[1 1 1];
 
             % MISSION PROPERTIES ------------------------------------------

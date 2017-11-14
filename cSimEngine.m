@@ -115,6 +115,8 @@ classdef cSimEngine < handle
                     if strcmp(Type,'Quad')
 %                         obj.Blackboard.Agents.(Type)(i).Camera.Vertices = [];
                         obj.Blackboard.Agents.(Type)(i).Camera = obj.Agents.(Type)(i).Camera;
+                        obj.Blackboard.Agents.(Type)(i).BatteryLevel = obj.Agents.(Type)(i).BatteryLevel;
+                        obj.Blackboard.Agents.(Type)(i).TargetCount = obj.Agents.(Type)(i).TargetCount;
                     end
                     
                     % Set final time of agent to final time of sim

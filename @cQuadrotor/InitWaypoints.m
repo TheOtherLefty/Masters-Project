@@ -9,7 +9,7 @@ dX = obj.CellSize;
 wpx = (0:gX-1)*dX;
 
 % Constant height
-wpz = -1.5;
+wpz = -1;
 
 % Repeat and flip over y range
 WP = [];

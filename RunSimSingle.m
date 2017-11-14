@@ -52,8 +52,8 @@ end
 
 % Simulation properties
 t = 0;          % Initialise time (s)
-tfin = 100;      % End time (s)
-dt = 0.01;      % Solver increment (s)
+tfin = 500;      % End time (s)
+dt = 0.002;      % Solver increment (s)
 tsamp = dt;    % Sample increment (s)
 tsamp = 0.05;
 
