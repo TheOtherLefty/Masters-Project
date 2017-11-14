@@ -1,8 +1,8 @@
-function State = FaultDetection(obj,X,State)
+function State = FaultDetection(obj, X, State)
 
 % Battery monitor
 % if X(15) < obj.WarningLevel && ~obj.BatteryWarning
-if obj.BatteryLevel <= 0 && ~obj.BatteryWarning
+if obj.BatteryLevel <= 0 && ~obj.BatteryWarning && norm(obj.States(1:2)) < 0.3
     fprintf('Time %4.2f s: BATTERY WARNING\n',obj.Time)
     obj.Cint = 0;
     State = 'Return to base';

@@ -1,7 +1,7 @@
 function [Yd, ExitFlag] = SmartSearch(obj, Y, t)
 
 % If at grid point, work out where to go
-if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
+if norm(Y(1:3)-obj.Waypoints(obj.WP,1:3)') < 1e-2
     
     % Current position and grid point
     x = round(Y(1)/obj.CellSize);
@@ -18,6 +18,7 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     cond{3} = abs(obj.Decisions.States.objs - objs) < tol;
     cond{4} = abs(sum(obj.Decisions.States.gps - obj.Decisions.Gridpoints,2)) < tol;
     cond{5} = abs(obj.Decisions.States.b - obj.BatteryLevel) < tol;
+    cond{6} = abs(obj.Decisions.States.s - obj.Decisions.Mode) < tol;
     
     % Reset battery if at (0, 0) and it's empty
     if abs(x) < tol && abs(y) < tol && abs(obj.BatteryLevel) < tol
@@ -29,7 +30,7 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
 %     check3 = find(cond3)
 %     check4 = find(cond4)
     
-    states_all = obj.Decisions.States.state(cond{1} & cond{2} & cond{3} & cond{4} & cond{5});
+    states_all = obj.Decisions.States.state(cond{1} & cond{2} & cond{3} & cond{4} & cond{5} & cond{6});
     
     % Limit to first solution only
     try
@@ -45,7 +46,7 @@ if norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
         fprintf('Current state values: posx: %d, posy: %d, objs: %d, b: %d\n', x, y, objs, obj.BatteryLevel)
         fprintf('    gps = [ '), fprintf('%d ', obj.Decisions.Gridpoints), fprintf(']\n\n')
         fprintf('Condition table:\n')
-        fprintf('   x   y objs gps  b \n')
+        fprintf('   x   y objs gps  b   s\n')
         disp(BoolTable)
     end
     

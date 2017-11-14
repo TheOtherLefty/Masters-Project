@@ -151,7 +151,7 @@ classdef cQuadrotor < cAgent
                 obj.Decisions.Transitions = varargin{i2+1};
 %                 obj.Decisions.State = 303;
                 obj.Decisions.Gridpoints = ones(1,prod(obj.GridSize));
-%                 obj.Decisions.
+                obj.Decisions.Mode = 0;
             end
 
             % Set home location

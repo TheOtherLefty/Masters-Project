@@ -118,10 +118,19 @@ switch State
         end
         
         % Update camera
-        [Coordinates,DropSite] = obj.CameraModel(obj.States,obj.Time);
+        [Coordinates,DropSite] = obj.CameraModel(obj.States, obj.Time);
         
         % Update object tracking
-        [~,att(2),~] = obj.ObjectTracking(Coordinates,DropSite);
+        [~,TargetFound,~] = obj.ObjectTracking(Coordinates,DropSite);
+        
+        % Update state if target is found at current waypoint
+        if TargetFound %&& norm(obj.States(1:3)-obj.Waypoints(obj.WP,1:3)') < 1e-2
+            obj.Decisions.Mode = 1;
+            x = round(obj.States(1)/obj.CellSize);
+            y = round(obj.States(2)/obj.CellSize);
+            obj.BatteryLevel = obj.BatteryLevel - 2*(x + y);
+%             [Commands, ExitFlag] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
+        end
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -131,7 +140,7 @@ switch State
             obj.Controller(obj.StatesEst,Commands,obj.Time,0);
         
         % Exit conditions
-        if att(2)
+        if obj.Decisions.Mode 
             fprintf('    Target found, need to identify\n')
             State = 'Identify';
             obj.VelLimit = obj.VelLimitSaved;
@@ -158,7 +167,7 @@ switch State
         [Coordinates,DropSite] = obj.CameraModel(obj.States,obj.Time);
         
         % Update object tracking
-        [~,att(2),~] = obj.ObjectTracking(Coordinates,DropSite);
+        [~,TargetFound,~] = obj.ObjectTracking(Coordinates,DropSite);
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -442,6 +451,7 @@ switch State
         else
             fprintf('    %d targets remaining\n', obj.NumTargets - obj.TargetCount)
             obj.WP = 1;
+            obj.Decisions.Mode = 0;
             State = 'Return to search';
         end
         
