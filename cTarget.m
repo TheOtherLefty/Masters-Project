@@ -55,14 +55,20 @@ classdef cTarget < cAgent
             % Initialise position
             obj.EffRadius = 0.05;
             i = find(strcmp(varargin,'Pose'));
-            if isempty(i)
+            %if isempty(i)
                 Pose = obj.InitPosition;
-            else
-                Pose = varargin{i+1};
-            end
+            %else   REMOVED TO MAKE MONTE CARLO WORK
+            %    Pose = varargin{i+1};
+            %end
+            
             
             % Intialise states
+           %disp(size(Pose));
+           %disp(size(zeros(6,1)));
+            
             obj.States = [Pose; zeros(6,1)];
+            
+            %disp(obj.States);
             
             % Initialise geometry
             obj.Geometry = obj.InitialiseGeometry;

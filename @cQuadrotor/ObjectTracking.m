@@ -10,7 +10,7 @@ Clw = obj.CurrentColours - obj.Cvar;
 numC = size(obj.CurrentColours,1);
 
 % Preallocate arrays
-Fid = cell(1,numC);
+Fid = cell(1,numC); 
 Fvis = cell(1,numC);
 Cvis = cell(1,numC);
 
@@ -58,7 +58,6 @@ for c = 1:numC
         Cntrd(c,:) = NaN*[1 1 1];
         obj.Ccheck(c,1) = 0;
     end
-    
 end
 
 % Save centroids to camera property
@@ -72,7 +71,7 @@ Cvis = Cntrd(~all(isnan(Cntrd),2),:);
 DS = sum(Vdsc,2)/size(Vdsc,2);
 CR = obj.Camera.FocalLength*obj.DropRadius/abs((obj.States(3)-obj.CameraPosition(3)));
 Cvisd = [];
-D = [];
+D = []; %distance of each object to drop site centroid
 for c = 1:size(Cvis,1)
     D(c) = norm(Cvis(c,1:2)-DS(1:2)');
 end
@@ -94,12 +93,14 @@ B = [];
 % for c = 1:size(Cvisd,1)
 %     B(c) = norm(Cvisd(c,1:2));
 % end
+
 if ~isempty(Cvisd)
     Cvisb = Cvis(and(abs(Cvis(:,1))<obj.Camera.Bnd/2,...
                 abs(Cvis(:,2))<obj.Camera.Bnd/2),:);
 %     Cvisb = Cvisd(B<obj.Camera.BndRadius,:)
 %     pause
 end
+
 %             Cvisb = Cvis(and(abs(Cvis(:,1))<obj.Camera.Bnd(1)/2,...
 %                 abs(Cvis(:,2))<obj.Camera.Bnd(2)/2),:);
 

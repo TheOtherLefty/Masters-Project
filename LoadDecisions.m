@@ -4,15 +4,15 @@ function [stateTable, transitionTable] = LoadDecisions(dataName)
 % clear
 % clc
 % 
-% dataName = 'scenario3b_5x5_4_3';
+dataName = 'scenario3b_5x5_1';
 
 %% Load data
 
 % Load states
-stateDataRaw = importdata(['Guidance/',dataName,'.sta']);
+stateDataRaw = importdata(['ControllerV2/',dataName,'.sta']);
 
 % Load transitions
-transDataFile = fopen(['Guidance/',dataName,'.tra']);
+transDataFile = fopen(['ControllerV2/',dataName,'.tra']);
 transDataRaw = textscan(transDataFile, '%s %s %s %s %s');
 fclose(transDataFile);
 
@@ -58,8 +58,7 @@ stateTable.b = stateValues(:,end);
 %% Format transitions
 
 % Fix things
-for i = 1:length(transDataRaw{1})
-    
+for i = 2:length(transDataRaw{1})
     currentState(i,1) = str2num(transDataRaw{1}{i});
     something(i,1) = str2num(transDataRaw{2}{i});
     nextState(i,1) = str2num(transDataRaw{3}{i});

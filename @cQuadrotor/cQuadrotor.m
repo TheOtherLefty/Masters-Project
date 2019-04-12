@@ -23,7 +23,7 @@ classdef cQuadrotor < cAgent
         FloorDamp = 0.5;
 
         % Power properties
-        MaxBattery = 32;
+        MaxBattery = 34;
         ChargeRate = 0.025; % Old
         LossRate = -0.005;  % Old
         BatteryRate;        % Old
@@ -58,6 +58,11 @@ classdef cQuadrotor < cAgent
         n_OT = 1e-4;
 
         % Mission properties
+        SearchType = "Smart";
+        InitialSearchType = "Smart";
+        BatteryUsage = 0;
+        FailureType = "N/A"
+        QuadInitialized = 0;
         SystemsOkay
         MissionComplete
         MissionFailed = 0;
@@ -96,9 +101,9 @@ classdef cQuadrotor < cAgent
 
         % Fault properties
         % (Faults % probability occ. in 1 minute)
-        P_GrabberFailure = 0*0.05;
-        P_ActuatorFailure = 0*0.01;
-        P_SystemsFault = 0*0.05;
+        P_GrabberFailure = 0.05;
+        P_ActuatorFailure = 0.01;
+        P_SystemsFault = 0.05;
         ActuatorFaults = [0 0 0 0]';
 
     end
@@ -107,7 +112,7 @@ classdef cQuadrotor < cAgent
 
         % CLASS CONSTRUCTOR -----------------------------------------------
         function obj = cQuadrotor(ID,Environment,varargin)
-
+            
             % ENVIRONMENT PROPERTIES
             obj.RoomSize = Environment.RoomSize;
             obj.GridSize = Environment.GridSize;

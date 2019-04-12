@@ -41,22 +41,57 @@ classdef cAgent < handle
 %         end
         
         % INITIALISE POSITION
-        function Pose = InitPosition(obj)
+        function [Pose] = InitPosition(obj)
             
-            % Old
+            
+            % Version 1
 %             Pose = [(obj.RoomLimits(1:2,2)-obj.RoomLimits(1:2,1)-0.2).*(rand(2,1)-0.5)...
 %                 + (obj.RoomLimits(1:2,2)+obj.RoomLimits(1:2,1))/2
 %                     -obj.EffRadius
 %                     zeros(2,1)
 %                     0*wrapToPi(2*pi*rand)];
 
-            % New
-            Pose = [(obj.RoomSize(1)+obj.CellSize)*rand - obj.CellSize/2
-                    (obj.RoomSize(2)+obj.CellSize)*rand - obj.CellSize/2
+            % Version 2
+%            Pose = [(obj.RoomSize(1)+obj.CellSize)*rand - obj.CellSize/2
+%                    (obj.RoomSize(2)+obj.CellSize)*rand - obj.CellSize/2
+%                    -obj.EffRadius
+%                    zeros(2,1)
+%                    0*wrapToPi(2*pi*rand)];
+                
+            % 2/2019
+            % Version 3: Objects are randomly allocated an integer
+            % gridpoint which is then scaled to the 0.5m size of each
+            % gridpoint. Objects then have a 0.5m variance within that
+            % gridpoint.
+            
+            % InitCoords retains a list of the integer gridpoints which
+            % already have objects at them. genCoords is repeatedly
+            % randomly assigned coordinates until an unoccupied coordinate
+            % is used.
+
+            persistent InitCoords;
+                
+            genCoords = [randi([0,obj.RoomSize(1)*2]),randi([0,obj.RoomSize(2)*2])];
+            
+        
+            
+            if ~isempty(InitCoords) %ismember(~,~,'rows') fails on empty matrices
+                while ismember(genCoords, InitCoords, 'rows') || isequal(genCoords,[0,0]) 
+                    genCoords = [randi([0,obj.RoomSize(1)*2]),randi([0,obj.RoomSize(2)*2])];
+                end
+            else
+                while isequal(genCoords,[0,0]) % Still need to check for objects spawning at (0,0)
+                    genCoords = [randi([0,obj.RoomSize(1)*2]),randi([0,obj.RoomSize(2)*2])];
+                end
+            end
+            
+            InitCoords = [InitCoords; genCoords];
+            
+            Pose = [genCoords(1)*0.5+(rand-0.5)*0.5
+                    genCoords(2)*0.5+(rand-0.5)*0.5
                     -obj.EffRadius
                     zeros(2,1)
-                    0*wrapToPi(2*pi*rand)];
-           
+                    0*wrapToPi(2*pi*rand)];                
         end
         
         % INTEGRATE STATE DERIVATIVES

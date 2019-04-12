@@ -1,7 +1,3 @@
-% Simulation executable for quadrotor model
-% Murray L Ireland
-% September 2015
-
 function [Data,Sim,Environment,Fail] = RunSim
 
 % close all
@@ -40,7 +36,7 @@ TAtt = [0 0 -1.6742
         0 0  0.6004]';
 Shapes = {'Cube','Ball','Pyramid'};
 for i = 1:NumTargets
-    Agents.Target(i) = cTarget(Shapes{i},Environment,'Pose','random');%,...
+    Agents.Target(i) = cTarget(Shapes{i},Environment,'Pose');%,...
 %         'Pose',[TPos(:,i); TAtt(:,i)]);
 end
 
@@ -73,5 +69,5 @@ end
 % Visualisations
 Data.PlotData;
 
-
+end
 

@@ -45,6 +45,8 @@ classdef cSimEngine < handle
                 obj.Progress = waitbar(0,'Initialising simulation');
             end
             
+            clear cAgent; %clears object coords from previous sims
+            
             % Initialise time properties
             obj.Time = t;
             obj.TimeFinal = tfin;

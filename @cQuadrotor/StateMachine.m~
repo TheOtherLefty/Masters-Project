@@ -9,7 +9,7 @@ obj.PrevMode = State;
 TargetFound = 0;
 
 if isempty(obj.Decisions)
-    obj.obj.SearchType = "Pattern";
+    obj.obj.SearchType = 'Pattern';
 end
 
 switch State
@@ -127,7 +127,7 @@ switch State
             % Movements of the camera sometimes result in the quad
             % glimpsing an object in an adjacent gp while it is in/moving to a previously searched location; this
             % checks if it is possible to find an object at the current location.
-            if strcmp(obj.SearchType,"Smart")
+            if strcmp(obj.SearchType,'Smart')
                 
                 x = round(x);
                 y = round(y);
@@ -159,7 +159,7 @@ switch State
                     State = 'Identify';
                     obj.VelLimit = obj.VelLimitSaved;
                 end
-            elseif strcmp(obj.SearchType,"Pattern")
+            elseif strcmp(obj.SearchType,'Pattern')
                     % Pattern search is unaffected by false positives
                     fprintf('    Identifying found target\n')
                     State = 'Identify';
@@ -171,16 +171,16 @@ switch State
             obj.Decisions.Mode = 1;
         end
         
-        if strcmp(obj.SearchType,"Smart")
+        if strcmp(obj.SearchType,'Smart')
             try
                 [Commands] = obj.SmartSearch(obj.States,obj.Time-obj.ModeEntryTime);
             catch
                 fprintf("SmartSearch encountered an error: Enabling Pattern search.\n")
-                obj.SearchType = "Pattern";
+                obj.SearchType = 'Pattern';
                 State = 'Return to base' ;           
             end
         end
-        if strcmp(obj.SearchType,"Pattern")
+        if strcmp(obj.SearchType,'Pattern')
             [Commands, ExitFlag] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
             if obj.BatteryWarning
                 State = 'Return to base';
@@ -199,7 +199,7 @@ switch State
         if obj.Time > obj.AbortTime
             fprintf('    No targets found, returning to base\n')
             obj.MissionFailed = 1;
-            obj.FailureType = "Maximum mission time exceeded.";
+            obj.FailureType = 'Maximum mission time exceeded.';
             State = 'Return to base';
             obj.VelLimit = obj.VelLimitSaved;
         elseif obj.MissionFailed
@@ -516,7 +516,7 @@ switch State
             obj.Decisions.Mode = 0;
             % Refuel if at base and in Pattern Search
             % Note: SmartSearch handles refueling within module.
-            if strcmp(obj.SearchType, "Pattern")
+            if strcmp(obj.SearchType, 'Pattern')
                 obj.BatteryUsage = obj.BatteryUsage + (obj.MaxBattery - obj.BatteryLevel);
                 obj.BatteryLevel = obj.MaxBattery;
             end
@@ -646,7 +646,7 @@ switch State
             
             % Refuel if at base and in Pattern Search
             % Note: SmartSearch handles refueling within module.
-            if strcmp(obj.SearchType, "Pattern")
+            if strcmp(obj.SearchType, 'Pattern')
                 obj.BatteryWarning = 0;
                 obj.BatteryUsage = obj.BatteryUsage + (obj.MaxBattery - obj.BatteryLevel);
                 obj.BatteryLevel = obj.MaxBattery;

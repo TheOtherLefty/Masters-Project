@@ -67,7 +67,6 @@ classdef cBlackBox < handle
                     end
                 end
             end
-            
         end
         
         % UPDATE BLACK BOX ------------------------------------------------
