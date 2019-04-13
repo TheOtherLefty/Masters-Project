@@ -75,6 +75,10 @@ switch State
             obj.BatteryLevel = obj.MaxBattery;
         end
         
+        % Initialize search algorithm incase of requirement
+        obj.InitWaypoints;
+        [~,~] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
+        
         % Update navigation
         Commands = [obj.Home(1:2)' -1 obj.Commands(6)]';
         

@@ -4,14 +4,17 @@ persistent lastWP;
 
 Exitflag = 0;
 
-x = round(obj.States(1)/obj.CellSize);
-y = round(obj.States(2)/obj.CellSize);
-
 % Initialize waypoints
-if isempty(lastWP) || obj.Time < 1
+if isempty(lastWP) || strcmp(obj.Mode,'Initialise')
     lastWP = 1;
+    Yd = 0;
+    ExitFlag = 0;
 % Check if at gridpoint
 elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
+    
+    x = round(obj.States(1)/obj.CellSize);
+    y = round(obj.States(2)/obj.CellSize);
+    
     % Check battery
     if obj.BatteryLevel <= 2*(x+y) && ~obj.BatteryWarning && norm(obj.States(1:2))
         fprintf('Time %4.2f s: BATTERY WARNING\n',obj.Time)
@@ -45,7 +48,9 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
         obj.WP
         error(['Cant find lastWP'])
     end
+    
     obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate;
+    
 end
 
 if obj.WP > obj.MaxWP
@@ -54,5 +59,4 @@ if obj.WP > obj.MaxWP
 else
     Exitflag = 0;
 end
-
 Yd = obj.Waypoints(obj.WP,:)';

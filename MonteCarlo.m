@@ -13,10 +13,10 @@ fprintf('March 2019\n')
 fprintf('-----------------------------------------------------\n\n')
 
 SimTime = tic;
-NumSims = 50;
+NumSims = 30;
 
 fprintf('Running %d simulations...\n\n', NumSims)
-fopen('MCResults.txt','w');
+fopen('MCResults.xlsx','w');
 results = ["Sim #","Time","Status","Battery Used","Remaining Objects","Initial Search Mode","Final Search Mode","Details"];
 
 % Simulation Loop --------------------------------------------------
