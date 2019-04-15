@@ -16,7 +16,6 @@ SimTime = tic;
 NumSims = 1000;
 
 fprintf('Running %d simulations...\n\n', NumSims)
-fopen('MCResults.xlsx','w');
 results = ["Sim #","Time","Status","Battery Used","Remaining Objects","Initial Search Mode","Final Search Mode","Details"];
 
 % Simulation Loop --------------------------------------------------
