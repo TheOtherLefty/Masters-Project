@@ -44,9 +44,9 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     elseif floor(obj.WP/5) < floor(lastWP/5)
         obj.WP = obj.WP+5;
     else
-        lastWP
-        obj.WP
-        error(['Cant find lastWP'])
+        % Something has gone wrong, reset search pattern.
+        lastWP = 1;
+        obj.Mode = 'Return to base';
     end
     
     obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate;

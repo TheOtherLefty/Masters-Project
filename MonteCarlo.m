@@ -13,7 +13,7 @@ fprintf('March 2019\n')
 fprintf('-----------------------------------------------------\n\n')
 
 SimTime = tic;
-NumSims = 30;
+NumSims = 1000;
 
 fprintf('Running %d simulations...\n\n', NumSims)
 fopen('MCResults.xlsx','w');
