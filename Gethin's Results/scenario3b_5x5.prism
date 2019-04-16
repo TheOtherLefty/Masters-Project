@@ -1,4 +1,4 @@
- // scenario 3
+// scenario 3
 // control of search and battery recharging
 
 mdp
@@ -21,11 +21,14 @@ const int battery;
 // number of objects
 const nobjs;
 
+// which of the four squares are we searching (1...4)
+const square;
+
 // number of unexplored gridpoints
 formula n = gp0+gp1+gp2+gp3+gp4+gp5+gp6+gp7+gp8+gp9+gp10+gp11+gp12+gp13+gp14+gp15+gp16+gp17+gp18+gp19+gp20+gp21+gp22+gp23+gp24;
 
 // probability of finding object
-formula p = objs/n;
+formula p = objs/(n + 16*(4-square));
 
 // module of the autonomous agent
 module agent
@@ -71,8 +74,14 @@ module agent
 	[east] gp0=1 & gp=0 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp0'=0) + 1-p : (posx'=posx+1)&(gp0'=0);
 	[east] gp0=0 & gp=0 & s=0 & posx<Xcoord -> (posx'=posx+1);
 
+	[west] gp0=1 & gp=0 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp0'=0) + 1-p : (posx'=posx-1)&(gp0'=0);
+	[west] gp0=0 & gp=0 & s=0 & posx>0 -> (posx'=posx-1);
+
 	[north] gp0=1 & gp=0 & s=0 &  posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp0'=0) + 1-p : (posy'=posy+1)&(gp0'=0);
 	[north] gp0=0 & gp=0 & s=0 &  posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp0=1 & gp=0 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp0'=0) + 1-p : (posy'=posy-1)&(gp0'=0);
+	[south] gp0=0 & gp=0 & s=0 & posy>0 -> (posy'=posy-1);
 
 	// search gridpoint 1
 	[east] gp1=1 & gp=1 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp1'=0) + 1-p : (posx'=posx+1)&(gp1'=0);
@@ -84,6 +93,9 @@ module agent
 	[north] gp1=1 & gp=1 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp1'=0) + 1-p : (posy'=posy+1)&(gp1'=0);
 	[north] gp1=0 & gp=1 & s=0 & posy<Ycoord -> (posy'=posy+1);
 
+	[south] gp1=1 & gp=1 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp1'=0) + 1-p : (posy'=posy-1)&(gp1'=0);
+	[south] gp1=0 & gp=1 & s=0 & posy>0 -> (posy'=posy-1);
+
 	// search gridpoint 2
 	[east] gp2=1 & gp=2 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp2'=0) + 1-p : (posx'=posx+1)&(gp2'=0);
 	[east] gp2=0 & gp=2 & s=0 & posx<Xcoord -> (posx'=posx+1);
@@ -93,6 +105,9 @@ module agent
 
 	[north] gp2=1 & gp=2 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp2'=0) + 1-p : (posy'=posy+1)&(gp2'=0);
 	[north] gp2=0 & gp=2 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
+	[south] gp2=1 & gp=2 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp2'=0) + 1-p : (posy'=posy-1)&(gp2'=0);
+	[south] gp2=0 & gp=2 & s=0 & posy>0 -> (posy'=posy-1);
 
 	// search gridpoint 3
 	[east] gp3=1 & gp=3 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp3'=0) + 1-p : (posx'=posx+1)&(gp3'=0);
@@ -104,7 +119,12 @@ module agent
 	[north] gp3=1 & gp=3 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp3'=0) + 1-p : (posy'=posy+1)&(gp3'=0);
 	[north] gp3=0 & gp=3 & s=0 & posy<Ycoord -> (posy'=posy+1);
 
+	[south] gp3=1 & gp=3 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp3'=0) + 1-p : (posy'=posy-1)&(gp3'=0);
+	[south] gp3=0 & gp=3 & s=0 & posy>0 -> (posy'=posy-1);
+
 	// search gridpoint 4
+	[east] gp4=1 & gp=4 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp4'=0) + 1-p : (posx'=posx+1)&(gp4'=0);
+	[east] gp4=0 & gp=4 & s=0 & posx<Xcoord -> (posx'=posx+1);
 
 	[west] gp4=1 & gp=4 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp4'=0) + 1-p : (posx'=posx-1)&(gp4'=0);
 	[west] gp4=0 & gp=4 & s=0 & posx>0 -> (posx'=posx-1);
@@ -112,9 +132,15 @@ module agent
 	[north] gp4=1 & gp=4 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp4'=0) + 1-p : (posy'=posy+1)&(gp4'=0);
 	[north] gp4=0 & gp=4 & s=0 & posy<Ycoord -> (posy'=posy+1);
 
+	[south] gp4=1 & gp=4 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp4'=0) + 1-p : (posy'=posy-1)&(gp4'=0);
+	[south] gp4=0 & gp=4 & s=0 & posy>0 -> (posy'=posy-1);
+
 	// search gridpoint 5
 	[east] gp5=1 & gp=5 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp5'=0) + 1-p : (posx'=posx+1)&(gp5'=0);
 	[east] gp5=0 & gp=5 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp5=1 & gp=5 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp5'=0) + 1-p : (posx'=posx-1)&(gp5'=0);
+	[west] gp5=0 & gp=5 & s=0 & posx>0 -> (posx'=posx-1);
 
 	[north] gp5=1 & gp=5 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp5'=0) + 1-p : (posy'=posy+1)&(gp5'=0);
 	[north] gp5=0 & gp=5 & s=0 & posy<Ycoord -> (posy'=posy+1);
@@ -162,6 +188,9 @@ module agent
 	[south] gp8=0 & gp=8 & s=0 & posy>0 -> (posy'=posy-1);
 
 	// search gridpoint 9
+	[east] gp9=1 & gp=9 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp9'=0) + 1-p : (posx'=posx+1)&(gp9'=0);
+	[east] gp9=0 & gp=9 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
 	[west] gp9=1 & gp=9 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp9'=0) + 1-p : (posx'=posx-1)&(gp9'=0);
 	[west] gp9=0 & gp=9 & s=0 & posx>0 -> (posx'=posx-1);
 
@@ -174,6 +203,9 @@ module agent
 	// search gridpoint 10
 	[east] gp10=1 & gp=10 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp10'=0) + 1-p : (posx'=posx+1)&(gp10'=0);
 	[east] gp10=0 & gp=10 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp10=1 & gp=10 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp10'=0) + 1-p : (posx'=posx-1)&(gp10'=0);
+	[west] gp10=0 & gp=10 & s=0 & posx>0 -> (posx'=posx-1);
 
 	[north] gp10=1 & gp=10 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp10'=0) + 1-p : (posy'=posy+1)&(gp10'=0);
 	[north] gp10=0 & gp=10 & s=0 & posy<Ycoord -> (posy'=posy+1);
@@ -221,6 +253,9 @@ module agent
 	[south] gp13=0 & gp=13 & s=0 & posy>0 -> (posy'=posy-1);
 
 	// search gridpoint 14
+	[east] gp14=1 & gp=14 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp14'=0) + 1-p : (posx'=posx+1)&(gp14'=0);
+	[east] gp14=0 & gp=14 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
 	[west] gp14=1 & gp=14 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp14'=0) + 1-p : (posx'=posx-1)&(gp14'=0);
 	[west] gp14=0 & gp=14 & s=0 & posx>0 -> (posx'=posx-1);
 
@@ -233,6 +268,9 @@ module agent
 	// search gridpoint 15
 	[east] gp15=1 & gp=15 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp15'=0) + 1-p : (posx'=posx+1)&(gp15'=0);
 	[east] gp15=0 & gp=15 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
+	[west] gp15=1 & gp=15 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp15'=0) + 1-p : (posx'=posx-1)&(gp15'=0);
+	[west] gp15=0 & gp=15 & s=0 & posx>0 -> (posx'=posx-1);
 
 	[north] gp15=1 & gp=15 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp15'=0) + 1-p : (posy'=posy+1)&(gp15'=0);
 	[north] gp15=0 & gp=15 & s=0 & posy<Ycoord -> (posy'=posy+1);
@@ -280,6 +318,9 @@ module agent
 	[south] gp18=0 & gp=18 & s=0 & posy>0 -> (posy'=posy-1);
 
 	// search gridpoint 19
+	[east] gp19=1 & gp=19 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp19'=0) + 1-p : (posx'=posx+1)&(gp19'=0);
+	[east] gp19=0 & gp=19 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
 	[west] gp19=1 & gp=19 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp19'=0) + 1-p : (posx'=posx-1)&(gp19'=0);
 	[west] gp19=0 & gp=19 & s=0 & posx>0 -> (posx'=posx-1);
 
@@ -293,6 +334,12 @@ module agent
 	[east] gp20=1 & gp=20 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp20'=0) + 1-p : (posx'=posx+1)&(gp20'=0);
 	[east] gp20=0 & gp=20 & s=0 & posx<Xcoord -> (posx'=posx+1);
 
+	[west] gp20=1 & gp=20 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp20'=0) + 1-p : (posx'=posx-1)&(gp20'=0);
+	[west] gp20=0 & gp=20 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp20=1 & gp=20 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp20'=0) + 1-p : (posy'=posy+1)&(gp20'=0);
+	[north] gp20=0 & gp=20 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
 	[south] gp20=1 & gp=20 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp20'=0) + 1-p : (posy'=posy-1)&(gp20'=0);
 	[south] gp20=0 & gp=20 & s=0 & posy>0 -> (posy'=posy-1);
 
@@ -302,6 +349,9 @@ module agent
 
 	[west] gp21=1 & gp=21 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp21'=0) + 1-p : (posx'=posx-1)&(gp21'=0);
 	[west] gp21=0 & gp=21 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp21=1 & gp=21 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp21'=0) + 1-p : (posy'=posy+1)&(gp21'=0);
+	[north] gp21=0 & gp=21 & s=0 & posy<Ycoord -> (posy'=posy+1);
 
 	[south] gp21=1 & gp=21 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp21'=0) + 1-p : (posy'=posy-1)&(gp21'=0);
 	[south] gp21=0 & gp=21 & s=0 & posy>0 -> (posy'=posy-1);
@@ -313,6 +363,9 @@ module agent
 	[west] gp22=1 & gp=22 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp22'=0) + 1-p : (posx'=posx-1)&(gp22'=0);
 	[west] gp22=0 & gp=22 & s=0 & posx>0 -> (posx'=posx-1);
 
+	[north] gp22=1 & gp=22 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp22'=0) + 1-p : (posy'=posy+1)&(gp22'=0);
+	[north] gp22=0 & gp=22 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
 	[south] gp22=1 & gp=22 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp22'=0) + 1-p : (posy'=posy-1)&(gp22'=0);
 	[south] gp22=0 & gp=22 & s=0 & posy>0 -> (posy'=posy-1);
 
@@ -323,12 +376,21 @@ module agent
 	[west] gp23=1 & gp=23 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp23'=0) + 1-p : (posx'=posx-1)&(gp23'=0);
 	[west] gp23=0 & gp=23 & s=0 & posx>0 -> (posx'=posx-1);
 
+	[north] gp23=1 & gp=23 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp23'=0) + 1-p : (posy'=posy+1)&(gp23'=0);
+	[north] gp23=0 & gp=23 & s=0 & posy<Ycoord -> (posy'=posy+1);
+
 	[south] gp23=1 & gp=23 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp23'=0) + 1-p : (posy'=posy-1)&(gp23'=0);
 	[south] gp23=0 & gp=23 & s=0 & posy>0 -> (posy'=posy-1);
 
 	// search gridpoint 24
+	[east] gp24=1 & gp=24 & s=0 & posx<Xcoord & p<=1 -> p : (s'=1)&(posx'=posx+1)&(gp24'=0) + 1-p : (posx'=posx+1)&(gp24'=0);
+	[east] gp24=0 & gp=24 & s=0 & posx<Xcoord -> (posx'=posx+1);
+
 	[west] gp24=1 & gp=24 & s=0 & posx>0 & p<=1 -> p : (s'=1)&(posx'=posx-1)&(gp24'=0) + 1-p : (posx'=posx-1)&(gp24'=0);
 	[west] gp24=0 & gp=24 & s=0 & posx>0 -> (posx'=posx-1);
+
+	[north] gp24=1 & gp=24 & s=0 & posy<Ycoord & p<=1 -> p : (s'=1)&(posy'=posy+1)&(gp24'=0) + 1-p : (posy'=posy+1)&(gp24'=0);
+	[north] gp24=0 & gp=24 & s=0 & posy<Ycoord -> (posy'=posy+1);
 
 	[south] gp24=1 & gp=24 & s=0 & posy>0 & p<=1 -> p : (s'=1)&(posy'=posy-1)&(gp24'=0) + 1-p : (posy'=posy-1)&(gp24'=0);
 	[south] gp24=0 & gp=24 & s=0 & posy>0 -> (posy'=posy-1);
@@ -360,9 +422,7 @@ module battery
 	[north] gp=base -> (b'=battery-2);
 	[south] gp=base -> (b'=battery-2);
 	
-	// deposit at base made in one step, one guard for each grip-point; updates searched status of gp upon finding an object.
-
-//FIX THIS
+	// deposit at base made in one step
 	[end] s=1 & b>=(2*(max(posx,basex)-min(posx,basex))+2*(max(posy,basey)-min(posy,basey))) -> (b'=b-(2*(max(posx,basex)-min(posx,basex))+2*(max(posy,basey)-min(posy,basey))));
 
 	// mission complete
@@ -387,7 +447,3 @@ rewards "charges"
         [east] posx=0 & posy=0 : 1;
         [west] posx=0 & posy=0 : 1;
 endrewards
-
-label "finished" = (s=2) & (posx=basex) & (posy=basey);
-
-// Pmax=? [F "finished"]

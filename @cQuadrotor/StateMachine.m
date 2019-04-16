@@ -413,11 +413,6 @@ switch State
         if strcmp(obj.ModeTransition,'Entry')
             obj.ModeTransition = 'Active';
             fprintf('Time %4.2f s: Transporting target\n',obj.Time)
-            
-            x = round(obj.States(1)/obj.CellSize);
-            y = round(obj.States(2)/obj.CellSize);
-            obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(x + y);
-            fprintf('Transport decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
         end
         
         % Update navigation
