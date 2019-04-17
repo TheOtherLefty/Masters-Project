@@ -58,8 +58,8 @@ classdef cQuadrotor < cAgent
         n_OT = 1e-4;
 
         % Mission properties
-        SearchType = "Smart";
-        InitialSearchType = "Smart";
+        SearchType = "Pattern";
+        InitialSearchType = "Pattern";
         BatteryUsage = 0;
         FailureType = "N/A"
         QuadInitialized = 0;

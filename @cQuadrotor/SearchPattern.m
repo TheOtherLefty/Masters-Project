@@ -15,6 +15,8 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     x = round(obj.States(1)/obj.CellSize);
     y = round(obj.States(2)/obj.CellSize);
     
+    fprintf('Time %4.2f Searching: (%d,%d)\n',obj.Time,x,y)
+    
     % Check battery
     if obj.BatteryLevel <= 2*(x+y) && ~obj.BatteryWarning && norm(obj.States(1:2))
         fprintf('Time %4.2f s: BATTERY WARNING\n',obj.Time)

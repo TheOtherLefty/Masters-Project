@@ -413,6 +413,13 @@ switch State
         if strcmp(obj.ModeTransition,'Entry')
             obj.ModeTransition = 'Active';
             fprintf('Time %4.2f s: Transporting target\n',obj.Time)
+            
+            if strcmp(obj.SearchType,"Pattern")
+                x = round(obj.States(1)/obj.CellSize);
+                y = round(obj.States(2)/obj.CellSize);
+                obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(x + y);
+                fprintf('Transporting decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
+            end
         end
         
         % Update navigation
@@ -595,7 +602,15 @@ switch State
             obj.ModeTransition = 'Active';
             obj.GrabberActive = 0;
             fprintf('Time %4.2f s: Returning to base\n',obj.Time)
+            
+            if strcmp(obj.SearchType,"Pattern")
+                x = round(obj.States(1)/obj.CellSize);
+                y = round(obj.States(2)/obj.CellSize);
+                obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(x + y);
+                fprintf('Returning to base decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
+            end
         end
+
         
         % Update navigation
         Commands = [obj.Home(1:2)' -1 0]';
