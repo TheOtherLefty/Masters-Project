@@ -27,7 +27,8 @@ if norm(Y(1:3)-obj.Waypoints(obj.WP,1:3)') < 1e-2
     [state,flag] = IdentifyState(obj, Y, SearchStatus);
     if flag
         fprintf('Error: Previous state: %d\n', obj.Decisions.CurrentState)
-        fprintf('Current state values: posx: %d, posy: %d, objs: %d, b: %d\n', x, y, objs, obj.BatteryLevel)
+        fprintf('Current state values: posx: %d, posy: %d, objs: %d, b: %d\n', x, y, objs, obj.BatteryLevel);
+        
         fprintf('    gps = [ '), fprintf('%d ', obj.Decisions.Gridpoints), fprintf(']\n\n')
         error(['Unrecognized State'])
     end
@@ -39,7 +40,7 @@ if norm(Y(1:3)-obj.Waypoints(obj.WP,1:3)') < 1e-2
     
     % Reset battery if at (0, 0) (and it's empty)
     if abs(x) < tol && abs(y) < tol
-        obj.BatteryUsage = obj.BatteryUsage + (obj.MaxBattery - obj.BatteryLevel);
+        obj.BatteryUsage = obj.BatteryUsage + (obj.MaxBattery - obj.BatteryLevel)
         obj.BatteryLevel = obj.MaxBattery - obj.BatteryLossRate;
     else
         obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate;

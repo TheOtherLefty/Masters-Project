@@ -22,6 +22,7 @@ switch State
             
             fprintf('Time %4.2f s: Agent idle\n',obj.Time)
             if obj.MissionComplete
+                obj.BatteryUsage = obj.BatteryUsage + (obj.MaxBattery - obj.BatteryLevel);
                 fprintf('    MISSION COMPLETE\n')
             elseif obj.MissionFailed
                 fprintf('    MISSION FAILED\n')
