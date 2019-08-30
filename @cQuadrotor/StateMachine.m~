@@ -135,7 +135,7 @@ switch State
             if strcmp(obj.SearchType,"Smart")
                 
                 [x,y] = adjustCoords(obj,round(x),round(y));
-                gp = nearestBaseWP(obj) + (y * 10 + x);
+                gp = nearestBaseWP(obj) + (y * 10 + x)
                 
                 if gp
                     % Make adjustments to check for found state
@@ -176,42 +176,41 @@ switch State
         end
         
         if strcmp(obj.SearchType,"Smart")
-            try
+%            try
+%            --------------------------------------------Reintroduce later.
                 [Commands] = obj.SmartSearch(obj.States,obj.Time-obj.ModeEntryTime);
-            catch
-                fprintf("SmartSearch encountered an error: Enabling Pattern search.\n")
-                obj.SearchType = "Pattern";
-                State = 'Return to base' ;           
-            end
+%            catch
+%                fprintf("SmartSearch encountered an error: Enabling Pattern search.\n")
+%                obj.SearchType = "Pattern";
+%                State = 'Return to base' ;           
+%            end
         end
         if strcmp(obj.SearchType,"Pattern")
-            [Commands, ~] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
+            [Commands, ExitFlag] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
             if obj.BatteryWarning
                 State = 'Return to base';
             end
         end
-        
+
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
 
-        if obj.MissionFailed
+        % Update controller
+        [obj.Inputs,obj.PseudoInputs,obj.Commands] = ...
+            obj.Controller(obj.StatesEst,Commands,obj.Time,0);
+
+        % Exit conditions
+        % Update navigation
+        if obj.Time > obj.AbortTime
+            fprintf('    No targets found, returning to base\n')
+            obj.MissionFailed = 1;
+            obj.FailureType = "Maximum mission time exceeded.";
+            State = 'Return to base';
+            obj.VelLimit = obj.VelLimitSaved;
+        elseif obj.MissionFailed
             fprintf('     All grid-points searched, returning to base\n')
             State = 'Return to base';
             obj.VelLimit = obj.VelLimitSaved;
-        else
-            % Update controller
-            [obj.Inputs,obj.PseudoInputs,obj.Commands] = ...
-                obj.Controller(obj.StatesEst,Commands,obj.Time,0);
-
-            % Exit conditions
-            % Update navigation
-            if obj.Time > obj.AbortTime
-                fprintf('    No targets found, returning to base\n')
-                obj.MissionFailed = 1;
-                obj.FailureType = "Maximum mission time exceeded.";
-                State = 'Return to base';
-                obj.VelLimit = obj.VelLimitSaved;
-            end
         end
         
     case 'Identify'

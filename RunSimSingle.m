@@ -5,13 +5,10 @@
 % -----------------------
 %
 % CURRENT STATUS:
-% Quad moves to grid point and then checks its current state against the
-% table of all possible states. It then moves in the direction specified by
-% the table of transitions.
+% 
 %
 % NEED TO:
-% Make sure quad only picks one state to move to. Additional states to
-% include in conditions are the mode and battery.
+% 
 %
 % -----------------------
 
@@ -29,13 +26,13 @@ SimTime = tic;
 
 
 % Load decision info
-DecisionsFile = 'scenario3b_5x5_4_3'; % Initial state: 303
+DecisionsFile = 'scenario3b_5x5_1'; % Initial state: 303
 [States, Transitions] = LoadDecisions(DecisionsFile);
 
 % AGENTS ------------------------------------------------------------------
 
 % Environment
-Environment = cEnvironment('Grid size',[5, 5]);
+Environment = cEnvironment('Grid size',[10, 10]);
 
 % Quadrotors
 Agents.Quad = cQuadrotor('Quad',Environment,'Pose',[0 0 0 0 0 0]',...

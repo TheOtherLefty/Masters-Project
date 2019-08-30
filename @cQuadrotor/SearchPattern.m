@@ -6,7 +6,7 @@ Exitflag = 0;
 
 % Initialize waypoints
 if isempty(lastWP) || strcmp(obj.Mode,'Initialise')
-    lastWP = 1;
+    lastWP = 56; %56 is mid waypoint in 10/10 grid; this is where base is
     Yd = 0;
     ExitFlag = 0;
 % Check if at gridpoint
@@ -26,12 +26,10 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     elseif obj.WP == lastWP
         % Track waypoints
         switch lastWP
-            case {1, 2, 3, 4, 11, 12, 13, 14, 21, 22, 23, 24}
-                obj.WP = obj.WP + 1;
-            case {7, 8, 9, 10, 17, 18, 19, 20}
-                obj.WP = obj.WP - 1;
-            case  {5, 6, 15, 16}
-                obj.WP = obj.WP + 5;
+            case {56}
+                obj.WP = obj.WP -10;
+            case {46}
+                obj.WP = obj.WP +10;
             case 25
                 if ~obj.Decisions.Mode
                     obj.MissionFailed = 1;
@@ -39,17 +37,21 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
                 end
         end
         lastWP = obj.WP;
-    % Check if we're in the right x column
-    elseif mod(obj.WP-1,5) < mod(lastWP-1,5)
-        obj.WP = obj.WP+1;
-    % Check if we're in the right y column
-    elseif floor(obj.WP/5) < floor(lastWP/5)
-        obj.WP = obj.WP+5;
+        
     else
-        % Something has gone wrong, reset search pattern.
-        lastWP = 1;
-        obj.Mode = 'Return to base';
+        
+        if obj.WP == 56
+            obj.WP = 46;
+        else
+            obj.WP = 56;
+        end
+        lastWP = obj.WP;
     end
+%    else
+        % Something has gone wrong, reset search pattern.
+%        lastWP = 1;
+%        obj.Mode = 'Return to base';
+%    end
     
     obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate;
     

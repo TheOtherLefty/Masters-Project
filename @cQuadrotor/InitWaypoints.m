@@ -13,12 +13,12 @@ wpz = -1;
 
 % Repeat and flip over y range
 WP = [];
-off = 0;
+off = -(gY/2)*dX;
 dir = 1;
-for i = 1:gY
+for i = off:dX:-off-dX
 
     WP = [WP
-          off+dir*wpx' zeros(gX,1)+dX*(i-1) zeros(gX,1)+wpz zeros(gX,1)];
+          off+dir*wpx' zeros(gX,1)+i zeros(gX,1)+wpz zeros(gX,1)];
     off = off + max(wpx)*dir;
     dir = -dir;
 

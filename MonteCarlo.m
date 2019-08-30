@@ -5,6 +5,7 @@
 close all
 clearvars -except h GlobalTime Count Run Runs SaveFile
 clc
+rng('shuffle');
 
 fprintf('-----------------------------------------------------\n')
 fprintf('Monte Carlo Simulation of UAV\n')
@@ -13,7 +14,7 @@ fprintf('March 2019\n')
 fprintf('-----------------------------------------------------\n\n')
 
 SimTime = tic;
-NumSims = 100;
+NumSims = 50;
 
 fprintf('Running %d simulations...\n\n', NumSims)
 results = ["Sim #","Time","Status","Battery Used","Remaining Objects","Initial Search Mode","Final Search Mode","Details"];
@@ -21,13 +22,13 @@ results = ["Sim #","Time","Status","Battery Used","Remaining Objects","Initial S
 % Simulation Loop --------------------------------------------------
 for simNum = 1:NumSims
     close all
-    clearvars -except h GlobalTime row results simNum NumSims Count Run Runs SaveFile
+    clearvars -except h GlobalTDime row results simNum NumSims Count Run Runs SaveFile
 
     % Initialize controller and environment for simulation.
-    DecisionsFile = 'ControllerV2/scenario3b_5x5_1'; % Initial state: 303
+    DecisionsFile = 'scenario3b_5x5_1'; % Initial state: 303
     [States, Transitions] = LoadDecisions(DecisionsFile);
 
-    Environment = cEnvironment('Grid size',[5, 5]);
+    Environment = cEnvironment('Grid size',[10, 10]);
 
     Agents.Quad = cQuadrotor('Quad',Environment,'Pose',[0 0 0 0 0 0]',...
         'States', States, 'Transitions', Transitions);

@@ -1,0 +1,190 @@
+PRISM
+=====
+
+Version: 4.4.dev
+Date: Sun Mar 24 17:09:02 GMT 2019
+Hostname: sand
+Memory limits: cudd=16g, java(heap)=622.2g
+Command line: prism scenario3b_5x5.prism scenario3b.props -const 'battery=34,nobjs=1,square=4' -prop 2 -s -javamaxmem 700g -cuddmaxmem 16g -exportadvmdp tmp2.tra -exportstates tmp2.sta -exportlabels tmp2.lab
+
+Parsing model file "scenario3b_5x5.prism"...
+
+Parsing properties file "scenario3b.props"...
+
+3 properties:
+(1) Pmax=? [ F ((s=2&objs=0)|(s=0&n=0))&posx=0&posy=0 ]
+(2) R{"time"}min=? [ F ((s=2&objs=0)|(s=0&n=0))&posx=0&posy=0 ]
+(3) R{"charges"}min=? [ F ((s=2&objs=0)|(s=0&n=0))&posx=0&posy=0 ]
+
+Type:        MDP
+Modules:     agent battery 
+Variables:   s posx posy objs gp0 gp1 gp2 gp3 gp4 gp5 gp6 gp7 gp8 gp9 gp10 gp11 gp12 gp13 gp14 gp15 gp16 gp17 gp18 gp19 gp20 gp21 gp22 gp23 gp24 b 
+
+Building model...
+Model constants: battery=34,nobjs=1,square=4
+
+Warning: Guard for command 31 of module "agent" is never satisfied.
+
+Warning: Guard for command 32 of module "agent" is never satisfied.
+
+Warning: Guard for command 71 of module "agent" is never satisfied.
+
+Warning: Guard for command 72 of module "agent" is never satisfied.
+
+Warning: Guard for command 111 of module "agent" is never satisfied.
+
+Warning: Guard for command 112 of module "agent" is never satisfied.
+
+Warning: Guard for command 151 of module "agent" is never satisfied.
+
+Warning: Guard for command 152 of module "agent" is never satisfied.
+
+Warning: Guard for command 191 of module "agent" is never satisfied.
+
+Warning: Guard for command 192 of module "agent" is never satisfied.
+
+Warning: Guard for command 2 of module "agent" is never satisfied.
+
+Warning: Guard for command 41 of module "agent" is never satisfied.
+
+Warning: Guard for command 42 of module "agent" is never satisfied.
+
+Warning: Guard for command 81 of module "agent" is never satisfied.
+
+Warning: Guard for command 82 of module "agent" is never satisfied.
+
+Warning: Guard for command 121 of module "agent" is never satisfied.
+
+Warning: Guard for command 122 of module "agent" is never satisfied.
+
+Warning: Guard for command 161 of module "agent" is never satisfied.
+
+Warning: Guard for command 162 of module "agent" is never satisfied.
+
+Warning: Guard for command 163 of module "agent" is never satisfied.
+
+Warning: Guard for command 164 of module "agent" is never satisfied.
+
+Warning: Guard for command 171 of module "agent" is never satisfied.
+
+Warning: Guard for command 172 of module "agent" is never satisfied.
+
+Warning: Guard for command 179 of module "agent" is never satisfied.
+
+Warning: Guard for command 180 of module "agent" is never satisfied.
+
+Warning: Guard for command 187 of module "agent" is never satisfied.
+
+Warning: Guard for command 188 of module "agent" is never satisfied.
+
+Warning: Guard for command 195 of module "agent" is never satisfied.
+
+Warning: Guard for command 196 of module "agent" is never satisfied.
+
+Warning: Guard for command 5 of module "agent" is never satisfied.
+
+Warning: Guard for command 6 of module "agent" is never satisfied.
+
+Warning: Guard for command 13 of module "agent" is never satisfied.
+
+Warning: Guard for command 14 of module "agent" is never satisfied.
+
+Warning: Guard for command 21 of module "agent" is never satisfied.
+
+Warning: Guard for command 22 of module "agent" is never satisfied.
+
+Warning: Guard for command 29 of module "agent" is never satisfied.
+
+Warning: Guard for command 30 of module "agent" is never satisfied.
+
+Warning: Guard for command 37 of module "agent" is never satisfied.
+
+Warning: Guard for command 38 of module "agent" is never satisfied.
+
+Warning: Guard for command 199 of module "agent" is never satisfied.
+
+Computing reachable states...
+
+Reachability (BFS): 99 iterations in 115.53 seconds (average 1.167020, setup 0.00)
+
+Time for model construction: 121.861 seconds.
+
+Type:        MDP
+States:      117026056 (1 initial)
+Transitions: 355758526
+Choices:     280210616
+
+Transition matrix: 923521 nodes (47 terminal), 355758526 minterms, vars: 40r/40c/5nd
+
+Exporting list of reachable states in plain text format to file "tmp2.sta"...
+
+Exporting labels and satisfying states in plain text format to file "tmp2.lab"...
+
+Warning: Disabling Prob1 since this is needed for adversary generation
+
+---------------------------------------------------------------------
+
+Model checking: R{"time"}min=? [ F ((s=2&objs=0)|(s=0&n=0))&posx=0&posy=0 ]
+Model constants: battery=34,nobjs=1,square=4
+
+Warning: Disabling Prob1 since this is needed for adversary generation
+
+Prob0A: 18 iterations in 1.41 seconds (average 0.078556, setup 0.00)
+
+Prob1E: 19 iterations in 1.43 seconds (average 0.075368, setup 0.00)
+
+Warning: PRISM hasn't checked for zero-reward loops.
+Your minimum rewards may be too low...
+
+goal = 5300061, inf = 0, maybe = 111725995
+
+Computing remaining rewards...
+Engine: Sparse
+
+Building sparse matrix (transitions)... [n=117026056, nc=274910555, nnz=350458465, k=4] [5.4 GB]
+Building action information... [446.4 MB]
+Building sparse matrix (transition rewards)... [n=117026056, nc=274910555, nnz=350458465, k=4] [5.4 GB]
+Creating vector for state rewards... [892.8 MB]
+Creating vector for inf... [892.8 MB]
+Allocating iteration vectors... [2 x 892.8 MB]
+Allocating adversary vector... [446.4 MB]
+TOTAL: [15.1 GB]
+
+Starting iterations...
+Iteration 2: max relative diff=0.888889, 6.05 sec so far
+Iteration 4: max relative diff=0.400000, 12.16 sec so far
+Iteration 6: max relative diff=0.210526, 18.30 sec so far
+Iteration 8: max relative diff=0.125000, 24.47 sec so far
+Iteration 10: max relative diff=0.100000, 30.68 sec so far
+Iteration 12: max relative diff=0.083333, 36.96 sec so far
+Iteration 14: max relative diff=0.071429, 43.30 sec so far
+Iteration 16: max relative diff=0.062500, 49.71 sec so far
+Iteration 18: max relative diff=0.055556, 56.16 sec so far
+Iteration 20: max relative diff=0.050000, 62.64 sec so far
+Iteration 22: max relative diff=0.045455, 69.16 sec so far
+Iteration 24: max relative diff=0.041667, 75.70 sec so far
+Iteration 26: max relative diff=0.028571, 82.26 sec so far
+Iteration 28: max relative diff=0.024194, 88.81 sec so far
+Iteration 30: max relative diff=0.018750, 95.37 sec so far
+Iteration 32: max relative diff=0.016667, 101.93 sec so far
+Iteration 34: max relative diff=0.013423, 108.50 sec so far
+Iteration 36: max relative diff=0.011628, 115.07 sec so far
+Iteration 38: max relative diff=0.009804, 121.65 sec so far
+Iteration 40: max relative diff=0.007576, 128.22 sec so far
+Iteration 42: max relative diff=0.005263, 134.78 sec so far
+Iteration 44: max relative diff=0.004098, 141.35 sec so far
+
+Iterative method: 45 iterations in 493.02 seconds (average 4.694289, setup 281.78)
+
+Adversary written to file "tmp2.tra".
+
+Value in the initial state: 36.83333333333333
+
+Time for model checking: 506.286 seconds.
+
+Result: 36.83333333333333 (value in the initial state)
+
+---------------------------------------------------------------------
+
+Note: There were 43 warnings during computation.
+

@@ -4,7 +4,6 @@ function [stateTable, transitionTable] = LoadDecisions(dataName)
 % clear
 % clc
 % 
-dataName = 'scenario3b_5x5_1';
 
 %% Load data
 

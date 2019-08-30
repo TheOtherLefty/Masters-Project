@@ -32,7 +32,7 @@ classdef cEnvironment < handle
                 % Drop site
                 i = find(strcmp(varargin,'Dropsite'));
                 if isempty(i)
-                    obj.Geometry.DropLocation = [0 0 0]';
+                    obj.Geometry.DropLocation = [-0.25 -0.25 0]';
                 else
                     obj.Geometry.DropLocation = varargin{i+1};
                 end
@@ -52,7 +52,7 @@ classdef cEnvironment < handle
                 obj.Geometry.Colours,obj.Geometry.Alpha]...
                 = obj.InitialiseGeometry;
             
-            obj.Geometry.DropRadius = 0.25;
+            obj.Geometry.DropRadius = 0.6;
             obj.Geometry.DropSite = obj.InitialiseDropSite;
             
         end
@@ -74,7 +74,7 @@ classdef cEnvironment < handle
                
             % Translate and rotate
             V = [V0 ones(size(V0,1),1)];
-            T = [eye(3) r
+            T = [eye(3) [0, 0, -1]';
                  zeros(1,3) 1];
             V = (T*V')'; 
             V = V(:,1:3);

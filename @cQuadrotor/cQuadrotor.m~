@@ -309,12 +309,9 @@ classdef cQuadrotor < cAgent
                             DecisionsFile = 'scenario3b_5x5_4_1'
                     end
                 case 4
-                    % In practice this will almost never be called as the
-                    % controller will usually realise something is wrong before it
-                    % reached the base where it would call this. Instead
-                    % this fail state is handles in SmartSearch.m
                     obj.MissionFailed = 1;
                     obj.FailureType = "Searched full grid: still missing objects.";
+
             end
             
             % Update controller states and transition tables to match those
@@ -325,6 +322,9 @@ classdef cQuadrotor < cAgent
         % Given a direction from a controller file, determines the actual
         % direction the quadrotor should move in on the environment grid.
         function tDirection = translateDirection(obj, direction)
+            if strcmp(direction,"")
+                tDirection = direction;
+            end
             
             switch nearestBaseWP(obj)
                 case 56
@@ -426,21 +426,17 @@ classdef cQuadrotor < cAgent
 
     methods(Static)
         function rDirection = reverseDirection(direction)
-            if strcmp(direction,"")
-                rDirection = direction;
-            else
-                switch direction
-                    case 'north'
-                        rDirection = 'south';
-                    case 'south'
-                        rDirection = 'north';
-                    case 'east'
-                        rDirection = 'west';
-                    case 'west'
-                        rDirection = 'east';
-                    otherwise
-                        rDirection = direction;
-                end
+            switch direction
+                case 'north'
+                    rDirection = 'south';
+                case 'south'
+                    rDirection = 'north';
+                case 'east'
+                    rDirection = 'west';
+                case 'west'
+                    rDirection = 'east';
+                otherwise
+                    rDirection = direction;
             end
         end
 

@@ -1,0 +1,38 @@
+PRISM
+=====
+
+Version: 4.4.dev
+Date: Sun Mar 24 08:09:59 GMT 2019
+Hostname: sand
+Memory limits: cudd=16g, java(heap)=622.2g
+Command line: prism -javamaxmem 700g -cuddmaxmem 16g -mdp -importtrans tmp.tra -importstates tmp.sta -importlabels tmp.lab -exporttrans scenario3b_5x5_2_3.tra -exportstates scenario3b_5x5_2_3.sta -exporttransdotstates scenario3b_5x5_2_3.dot -fixdl
+
+Importing model (MDP) from "tmp.tra", "tmp.sta", "tmp.lab"...
+
+Building model...
+
+Computing reachable states...
+
+Reachability (BFS): 38 iterations in 29.28 seconds (average 0.770605, setup 0.00)
+
+Time for model construction: 81137.45 seconds.
+
+Warning: Deadlocks detected and fixed in 1001 states
+
+Type:        MDP
+States:      4410 (1 initial)
+Transitions: 5768
+Choices:     4410
+
+Transition matrix: 77834 nodes (136 terminal), 5768 minterms, vars: 41r/41c/1nd
+
+Exporting transition matrix in plain text format to file "scenario3b_5x5_2_3.tra"...
+
+Exporting list of reachable states in plain text format to file "scenario3b_5x5_2_3.sta"...
+
+Exporting transition matrix in Dot format (with states) to file "scenario3b_5x5_2_3.dot"...
+
+---------------------------------------------------------------------
+
+Note: There was 1 warning during computation.
+
