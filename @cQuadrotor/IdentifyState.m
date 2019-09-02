@@ -61,9 +61,9 @@ function [state, flag] = IdentifyState(obj, Y, SearchStatus)
     
     state = obj.Decisions.States.state(conditions);
     
-    fprintf('\n')
-    fprintf('Current state values: s: %d, q: %d, posx: %d, posy: %d, objs: %d, b: %d\n', SearchStatus, obj.SearchedQuadrants, x, y, objs, obj.BatteryLevel)
-    fprintf('    gps = [ '), fprintf('%d ', quadrantGPS), fprintf(']\n')
+    %fprintf('\n')
+    %fprintf('Current state values: s: %d, q: %d, posx: %d, posy: %d, objs: %d, b: %d\n', SearchStatus, obj.SearchedQuadrants, x, y, objs, obj.BatteryLevel)
+    %fprintf('    gps = [ '), fprintf('%d ', quadrantGPS), fprintf(']\n')
     
     if isempty(state)
         flag = 1;
