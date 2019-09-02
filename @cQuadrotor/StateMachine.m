@@ -49,8 +49,11 @@ switch State
             fprintf('Time %4.2f s: Taking off\n',obj.Time)
         end
         
+        obj.InitWaypoints;
+        
         % Update navigation
-        Commands = [obj.Home(1:2)' -1 obj.Commands(6)]';
+        wp = obj.Waypoints(nearestBaseWP(obj),:);
+        Commands = [wp(1:2) -1 obj.Commands(6)]';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -77,11 +80,11 @@ switch State
         end
         
         % Initialize search algorithm incase of requirement
-        obj.InitWaypoints;
         [~,~] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
         
         % Update navigation
-        Commands = [obj.Home(1:2)' -1 obj.Commands(6)]';
+        wp = obj.Waypoints(nearestBaseWP(obj),:);
+        Commands = [wp(1:2) -1 obj.Commands(6)]';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -608,14 +611,17 @@ switch State
             if strcmp(obj.SearchType,"Pattern")
                 x = round(obj.States(1)/obj.CellSize);
                 y = round(obj.States(2)/obj.CellSize);
-                obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(x + y);
+                
+                [x, y] = adjustCoords(obj, x, y);
+                
+                obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(abs(x) + abs(y));
                 fprintf('Returning to base decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
             end
         end
 
         
         % Update navigation
-        Commands = [obj.Home(1:2)' -1 0]';
+        Commands = obj.Waypoints(nearestBaseWP(obj),:)';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -643,7 +649,8 @@ switch State
         end
         
         % Update navigation
-        Commands = [obj.Home(1:2)' -obj.EffRadius obj.Commands(4)]';
+        wp = obj.Waypoints(nearestBaseWP(obj),:);
+        Commands = [wp(1:2) -obj.EffRadius obj.Commands(4)]';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);

@@ -68,7 +68,7 @@ classdef cQuadrotor < cAgent
         MissionComplete
         MissionFailed = 0;
         MissionEnd = 0;
-        AbortTime = 600;
+        AbortTime = 900;
         ModeEntryTime = 0;
         Waypoints
         IDPosition;

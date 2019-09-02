@@ -70,18 +70,16 @@ classdef cAgent < handle
             % is used.
 
             persistent InitCoords;
-            obj.RoomSize(1)
-            obj.RoomSize(2)
             
-            genCoords = [randi([0,obj.RoomSize(1)*2])-obj.RoomSize(1),randi([0,obj.RoomSize(2)*2])-obj.RoomSize(2)]
+            genCoords = [randi([0,(obj.RoomSize(1)-0.5)*2])-(obj.RoomSize(1)),randi([0,(obj.RoomSize(2)-0.5)*2])-(obj.RoomSize(2))];
             
             if ~isempty(InitCoords) %ismember(~,~,'rows') fails on empty matrice
                 while ismember(genCoords, InitCoords, 'rows') || (genCoords(1) >= -1 && genCoords(1) <= 1) && (genCoords(2) >= -1 && genCoords(2) <= 1)
-                     genCoords = [randi([0,obj.RoomSize(1)*2])-obj.RoomSize(1),randi([0,obj.RoomSize(2)*2])-obj.RoomSize(2)]
+                    genCoords = [randi([0,(obj.RoomSize(1)-0.5)*2])-(obj.RoomSize(1)),randi([0,(obj.RoomSize(2)-0.5)*2])-(obj.RoomSize(2))];
                 end
             else
                 while (genCoords(1) >= -1 && genCoords(1) <= 1) && (genCoords(2) >= -1 && genCoords(2) <= 1) % Still need to check for objects spawning at base locations
-                     genCoords = [randi([0,obj.RoomSize(1)*2])-obj.RoomSize(1),randi([0,obj.RoomSize(2)*2])-obj.RoomSize(2)]
+                    genCoords = [randi([0,(obj.RoomSize(1)-0.5)*2])-(obj.RoomSize(1)),randi([0,(obj.RoomSize(2)-0.5)*2])-(obj.RoomSize(2))];
                 end
             end
             

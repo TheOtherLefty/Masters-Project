@@ -8,16 +8,33 @@ Exitflag = 0;
 % Initialize waypoints
 if isempty(lastWP) || strcmp(obj.Mode,'Initialise')
     searchMove = 0;
-    lastWP = 100;
+    lastWP = 100
     Yd = 0;
     ExitFlag = 0;
 % Check if at gridpoint
 elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
     
+    % Determines that the quad has been to base.
+    % Pushes quad to next unsearched gp instead of recovering the last move.
+    if obj.BatteryLevel == 34
+        switch lastWP
+            case {1, 12, 23, 34}
+                searchMove = 1;
+            case {10, 19, 28, 37}
+                searchMove = 10;
+            case {68, 79, 90, 100}
+                searchMove = -1;
+            case {64, 73, 82, 91}
+                searchMove = -10;
+        
+        lastWP = lastWP+searchMove
+    end
+    
     x = round(obj.States(1)/obj.CellSize);
     y = round(obj.States(2)/obj.CellSize);
     
     [x,y] = adjustCoords(obj, x, y);
+    b = obj.BatteryLevel
     fprintf('Time %4.2f Searching: (%d,%d)\n',obj.Time,x,y)
     % Check battery
     if obj.BatteryLevel <= 2*(abs(x)+abs(y)) && ~obj.BatteryWarning && norm(obj.States(1:2))
@@ -26,7 +43,7 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
         obj.BatteryWarning = 1;
     % If at lastWP we're in the middle of a search
     elseif obj.WP == lastWP
-        %fprintf('Time %4.2f s: At:%d, Navigating from:%d, SearchMove:%d \n',obj.Time,obj.WP,lastWP,searchMove)
+        fprintf('Time %4.2f s: At:%d, Navigating from:%d, SearchMove:%d \n',obj.Time,obj.WP,lastWP,searchMove)
         
         % Track waypoints
         switch obj.WP
@@ -61,7 +78,7 @@ elseif norm(Y([1:3,6])-obj.Waypoints(obj.WP,1:4)') < 1e-2
                 returnMove = -10;
             end
         end
-        %fprintf('Time %4.2f s: At:%d, Navigating to:%d, ReturnMove:%d, SearchMove:%d \n',obj.Time,obj.WP,lastWP+searchMove,returnMove,searchMove)
+        fprintf('Time %4.2f s: At:%d, Navigating to:%d, ReturnMove:%d, SearchMove:%d \n',obj.Time,obj.WP,lastWP+searchMove,returnMove,searchMove)
         obj.WP = obj.WP + returnMove;
     end
 %    else

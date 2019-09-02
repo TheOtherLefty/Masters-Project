@@ -81,6 +81,8 @@ switch State
         [~,~] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
         
         % Update navigation
+                wp = obj.Waypoints(nearestBaseWP(obj),:);
+        Commands = [wp(1:2)' -1 obj.Commands(6)]';
         Commands = [obj.Home(1:2)' -1 obj.Commands(6)]';
         
         % State reconstruction
@@ -135,7 +137,7 @@ switch State
             if strcmp(obj.SearchType,"Smart")
                 
                 [x,y] = adjustCoords(obj,round(x),round(y));
-                gp = nearestBaseWP(obj) + (y * 10 + x)
+                gp = nearestBaseWP(obj) + (y * 10 + x);
                 
                 if gp
                     % Make adjustments to check for found state
@@ -176,41 +178,42 @@ switch State
         end
         
         if strcmp(obj.SearchType,"Smart")
-%            try
-%            --------------------------------------------Reintroduce later.
+            try
                 [Commands] = obj.SmartSearch(obj.States,obj.Time-obj.ModeEntryTime);
-%            catch
-%                fprintf("SmartSearch encountered an error: Enabling Pattern search.\n")
-%                obj.SearchType = "Pattern";
-%                State = 'Return to base' ;           
-%            end
+            catch
+                fprintf("SmartSearch encountered an error: Enabling Pattern search.\n")
+                obj.SearchType = "Pattern";
+                State = 'Return to base' ;           
+            end
         end
         if strcmp(obj.SearchType,"Pattern")
-            [Commands, ExitFlag] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
+            [Commands, ~] = obj.SearchPattern(obj.States,obj.Time-obj.ModeEntryTime);
             if obj.BatteryWarning
                 State = 'Return to base';
             end
         end
-
+        
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
 
-        % Update controller
-        [obj.Inputs,obj.PseudoInputs,obj.Commands] = ...
-            obj.Controller(obj.StatesEst,Commands,obj.Time,0);
-
-        % Exit conditions
-        % Update navigation
-        if obj.Time > obj.AbortTime
-            fprintf('    No targets found, returning to base\n')
-            obj.MissionFailed = 1;
-            obj.FailureType = "Maximum mission time exceeded.";
-            State = 'Return to base';
-            obj.VelLimit = obj.VelLimitSaved;
-        elseif obj.MissionFailed
+        if obj.MissionFailed
             fprintf('     All grid-points searched, returning to base\n')
             State = 'Return to base';
             obj.VelLimit = obj.VelLimitSaved;
+        else
+            % Update controller
+            [obj.Inputs,obj.PseudoInputs,obj.Commands] = ...
+                obj.Controller(obj.StatesEst,Commands,obj.Time,0);
+
+            % Exit conditions
+            % Update navigation
+            if obj.Time > obj.AbortTime
+                fprintf('    No targets found, returning to base\n')
+                obj.MissionFailed = 1;
+                obj.FailureType = "Maximum mission time exceeded.";
+                State = 'Return to base';
+                obj.VelLimit = obj.VelLimitSaved;
+            end
         end
         
     case 'Identify'
@@ -607,14 +610,20 @@ switch State
             if strcmp(obj.SearchType,"Pattern")
                 x = round(obj.States(1)/obj.CellSize);
                 y = round(obj.States(2)/obj.CellSize);
+                
+                [x, y] = adjustCoords(obj, x, y);
+                
+                x = abs(x);
+                y = abs(y);
+                
                 obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(x + y);
-                fprintf('Returning to base decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
+                fprintf('Returning to base decreased battery by %d ; Absolute Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
             end
         end
 
         
         % Update navigation
-        Commands = [obj.Home(1:2)' -1 0]';
+        Commands = obj.Waypoints(nearestBaseWP(obj),:)';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
@@ -642,7 +651,7 @@ switch State
         end
         
         % Update navigation
-        Commands = [obj.Home(1:2)' -obj.EffRadius obj.Commands(4)]';
+        Commands = [obj.Waypoints(nearestBaseWP(obj),:)' -obj.EffRadius obj.Commands(4)]';
         
         % State reconstruction
         obj.StatesEst = obj.StateReconstruction(obj.Outputs);
