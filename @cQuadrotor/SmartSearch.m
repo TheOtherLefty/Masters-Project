@@ -110,7 +110,7 @@ if norm(Y(1:3)-obj.Waypoints(obj.WP,1:3)') < 1e-2
             % adjust x and y coordinate values depending on quadrant.
 
             obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(abs(x) + abs(y));
-            fprintf('Transporting decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
+            fprintf('Transporting decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(abs(x) + abs(y)), x, y, obj.BatteryLevel)
             % If no direction is returned this means we're at the end of the controller file, indicating quadrant has been
             % searched fully.
             

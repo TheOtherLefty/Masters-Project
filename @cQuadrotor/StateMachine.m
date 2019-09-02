@@ -422,8 +422,12 @@ switch State
             if strcmp(obj.SearchType,"Pattern")
                 x = round(obj.States(1)/obj.CellSize);
                 y = round(obj.States(2)/obj.CellSize);
-                obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(x + y);
-                fprintf('Transporting decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(x + y), x, y, obj.BatteryLevel)
+                
+                [x, y] = adjustCoords(obj, x, y);
+                
+                
+                obj.BatteryLevel = obj.BatteryLevel - obj.BatteryLossRate*(abs(x) + abs(y));
+                fprintf('Transporting decreased battery by %d ; Coordinates = (%d,%d); New battery value: %d \n', 2*(abs(x) + abs(y)), x, y, obj.BatteryLevel)
             end
         end
         

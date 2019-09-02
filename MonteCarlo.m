@@ -14,7 +14,7 @@ fprintf('March 2019\n')
 fprintf('-----------------------------------------------------\n\n')
 
 SimTime = tic;
-NumSims = 10;
+NumSims = 20;
 
 fprintf('Running %d simulations...\n\n', NumSims)
 results = ["Sim #","Time","Status","Battery Used","Remaining Objects","Initial Search Mode","Final Search Mode","Details"];
