@@ -1,4 +1,4 @@
-# Autonomous Quad 2017
+# Autonomous Quad 2019
 
 ## To Run
 Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``MonteCarlo.m`` is used to execute the simulation inside a Monte-Carlo run, adjust the script to change number of instances run.
