@@ -10,16 +10,7 @@ Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``M
 | File | Description |
 | - | - |
 | ``RunSimSingle.m`` | Run single instance of simulation. |
-| ``GetVerificationData.m`` |  |
-
-#### Functions
-| File | Description |
-| - | - |
-| ``RunSim.m`` |  |
-| ``AverageProperties.m`` |  |
-| ``GetProperties.m`` |  |
-| ``LoadDecisions.m`` |  |
-| ``GenerateExcel`` |  |
+| ``MonteCarlo.m`` | Run multiple instances of simulation and output data to excel spreadsheet "MCResults.xslx" |
 
 #### Classes
 | File | Description |
