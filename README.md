@@ -3,6 +3,12 @@
 ## To Run
 Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``RunSim.m`` is used to execute the simulation inside a Monte-Carlo run.
 
+## Branch Descriptions
+
+| Branch | Description |
+| Master | Contains original simulation. UAV searches 5x5 grid for 3 objects (prism, cube, sphere), deposit base is located at coordinate (0,0). |
+| Symmetry | Updated implementation, base coordinate moved to center of a 10x10 grid. Symmetrically applies the same controller 4 times for each 5x5 quadrant, transitioning between the two. |
+
 ## File Descriptions
 
 ### Main Directory
@@ -16,10 +22,7 @@ Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``R
 | File | Description |
 | - | - |
 | ``RunSim.m`` | Run Monte Carlo simulation |
-| ``AverageProperties.m`` |  |
-| ``GetProperties.m`` |  |
-| ``LoadDecisions.m`` |  |
-| ``GenerateExcel`` |  |
+
 
 #### Classes
 | File | Description |
@@ -33,24 +36,3 @@ Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``R
 | File | Description |
 | - | - |
 | ``cQuadrotor.m`` | Quadrotor class with properties and class constructor. Subclass of ``cAgent``. |
-| ``CameraModel.m`` |  |
-| ``Controller.m`` |  |
-| ``Dynamics.m`` |  |
-| ``EmergencyController.m`` |  |
-| ``FaultDetection.m`` |  |
-| ``Faults.m`` |  |
-| ``GrabberGeometry.m`` |  |
-| ``IMU.m`` |  |
-| ``InitWaypoints.m`` |  |
-| ``InitialiseControllers.m`` |  |
-| ``InitialiseGeometry.m`` |  |
-| ``ObjectTracking.m`` |  |
-| ``Optitrack.m`` |  |
-| ``SearchPattern.m`` |  |
-| ``Sensors.m`` |  |
-| ``SmartSearch.m`` |  |
-| ``StateMachine.m`` |  |
-| ``StateReconstruction.m`` |  |
-| ``StatusMonitor.m`` |  |
-| ``UpdateAgent.m`` |  |
-| ``VisionController.m`` |  |
