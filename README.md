@@ -1,7 +1,7 @@
 # Autonomous Quad 2017
 
 ## To Run
-Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``RunSim.m`` is used to execute the simulation inside a Monte-Carlo run.
+Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``MonteCarlo.m`` is used to execute the simulation inside a Monte-Carlo run, adjust the script to change number of instances run.
 
 ## File Descriptions
 
@@ -33,24 +33,3 @@ Run ``RunSimSingle.m`` in MATLAB to run a single instance of the simulation. ``R
 | File | Description |
 | - | - |
 | ``cQuadrotor.m`` | Quadrotor class with properties and class constructor. Subclass of ``cAgent``. |
-| ``CameraModel.m`` |  |
-| ``Controller.m`` |  |
-| ``Dynamics.m`` |  |
-| ``EmergencyController.m`` |  |
-| ``FaultDetection.m`` |  |
-| ``Faults.m`` |  |
-| ``GrabberGeometry.m`` |  |
-| ``IMU.m`` |  |
-| ``InitWaypoints.m`` |  |
-| ``InitialiseControllers.m`` |  |
-| ``InitialiseGeometry.m`` |  |
-| ``ObjectTracking.m`` |  |
-| ``Optitrack.m`` |  |
-| ``SearchPattern.m`` |  |
-| ``Sensors.m`` |  |
-| ``SmartSearch.m`` |  |
-| ``StateMachine.m`` |  |
-| ``StateReconstruction.m`` |  |
-| ``StatusMonitor.m`` |  |
-| ``UpdateAgent.m`` |  |
-| ``VisionController.m`` |  |
